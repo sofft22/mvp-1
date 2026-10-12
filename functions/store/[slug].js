@@ -9,9 +9,9 @@ export function renderNotFound() {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Store not found · BIOSHOP</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/store.css"></head>
 <body><main class="wrap" style="text-align:center;padding-top:96px">
-<h1 style="font:400 32px/1.15 'Instrument Serif',Georgia,serif">This store doesn't exist</h1>
+<h1 style="font:400 28px/1.15 'Instrument Serif',Georgia,serif;letter-spacing:-0.02em">This store doesn't exist</h1>
 <p class="bio" style="margin-top:14px">The link may be misspelled, or the seller changed it.</p>
-<p style="margin-top:28px"><a class="btn" href="/signup">Open your own free store</a></p></main></body></html>`;
+<p style="margin-top:24px"><a class="btn" href="/signup">Open your own free store</a></p></main></body></html>`;
 }
 
 export function renderStore({ store, products, showBranding, origin }) {
@@ -23,7 +23,7 @@ export function renderStore({ store, products, showBranding, origin }) {
   const cards = products
     .map((p) => {
       const media = p.images.length
-        ? `<img src="${esc(p.images[0])}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="400" height="400">`
+        ? `<img src="${esc(p.images[0])}" alt="${esc(p.name)}" loading="lazy" decoding="async" width="400" height="500">`
         : `<span class="letter" aria-hidden="true">${esc(p.name.trim().charAt(0).toUpperCase())}</span>`;
       return `<button class="card" type="button" data-id="${esc(p.id)}">
   <span class="ph">${media}${p.in_stock ? "" : '<span class="sold">Sold out</span>'}</span>
@@ -56,6 +56,13 @@ export function renderStore({ store, products, showBranding, origin }) {
     ? `<a class="btn wa" href="https://wa.me/${esc(store.whatsapp)}?text=${encodeURIComponent("Hi! I found your store on BIOSHOP.")}" rel="noopener">Message on WhatsApp</a>`
     : "";
 
+  const coverHtml = store.cover_url
+    ? `<div class="cover"><img src="${esc(store.cover_url)}" alt=""></div>`
+    : "";
+  const avatarInner = store.avatar_url
+    ? `<img src="${esc(store.avatar_url)}" alt="">`
+    : initial;
+
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -75,14 +82,15 @@ ${firstImage ? `<meta property="og:image" content="${esc(origin + firstImage)}">
 </head>
 <body>
 <main class="wrap">
-  <header class="head">
-    <div class="avatar" aria-hidden="true">${initial}</div>
+  ${coverHtml}
+  <header class="head${store.cover_url ? " has-cover" : ""}">
+    <div class="avatar" aria-hidden="true">${avatarInner}</div>
     <h1>${esc(store.name)}</h1>
     ${store.bio ? `<p class="bio">${esc(store.bio)}</p>` : ""}
     ${waHello}
   </header>
   ${products.length ? `<section class="grid" aria-label="Products">\n${cards}\n</section>` : `<p class="empty">No products yet. Check back soon.</p>`}
-  ${showBranding ? `<footer class="foot"><a href="/signup">Made with BIOSHOP. Open your free store</a></footer>` : ""}
+  ${showBranding ? `<footer class="foot"><a href="/signup">Made with BIOSHOP</a></footer>` : ""}
 </main>
 <dialog id="sheet" aria-label="Product details"></dialog>
 <script type="application/json" id="data">${safeJson(data)}</script>
@@ -109,7 +117,7 @@ export async function onRequestGet({ request, env, params }) {
   const [prodRes, imgRes] = await Promise.all([
     env.DB.prepare("SELECT id, name, price, description, in_stock FROM products WHERE store_id = ? ORDER BY created_at ASC LIMIT ?")
       .bind(row.id, Math.min(limits.products, 300)).all(),
-    env.DB.prepare("SELECT product_id, key FROM product_images WHERE store_id = ? ORDER BY created_at ASC, rowid ASC").bind(row.id).all(),
+    env.DB.prepare("SELECT product_id, key FROM product_images WHERE store_id = ? AND product_id NOT LIKE 'branding-%' ORDER BY created_at ASC, rowid ASC").bind(row.id).all(),
   ]);
 
   const byProduct = new Map();
