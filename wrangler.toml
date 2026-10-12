@@ -7,7 +7,3 @@ binding = "DB"
 database_name = "bioshop"
 database_id = "585a9fde-4953-4361-9344-c99b1738c64e"
 migrations_dir = "migrations"
-
-[[r2_buckets]]
-binding = "IMAGES"
-bucket_name = "bioshop-images"
