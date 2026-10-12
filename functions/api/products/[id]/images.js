@@ -31,9 +31,10 @@ export async function onRequestPost({ request, env, params }) {
   if (!kind) return err("Use a JPG, PNG or WebP photo.", 415);
 
   const key = `${auth.store.id}/${randomHex(12)}.${kind.ext}`;
-  await env.IMAGES.put(key, buf, { httpMetadata: { contentType: kind.type } });
   const id = newId();
-  await env.DB.prepare("INSERT INTO product_images (id, product_id, store_id, key, created_at) VALUES (?, ?, ?, ?, ?)")
-    .bind(id, params.id, auth.store.id, key, Date.now()).run();
+  await env.DB.prepare(
+    "INSERT INTO product_images (id, product_id, store_id, key, bytes, content_type, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)"
+  ).bind(id, params.id, auth.store.id, key, new Uint8Array(buf), kind.type, Date.now()).run();
+
   return json({ ok: true, image: { id, url: `/img/${key}` } });
 }
