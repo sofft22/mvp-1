@@ -4,34 +4,571 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>Dashboard · BIOSHOP</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/app.css">
+<title>Dashboard · BioStore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF9F5;
+  --soft:#F4EFE7;
+  --ink:#0F0F0F;
+  --ink-2:#2B2B2B;
+  --muted:#6B6660;
+  --faint:#9A948C;
+  --line:#E6DFD4;
+  --accent:#C66B4F;
+  --accent-soft:#FBEEE7;
+  --danger:#B14A2E;
+  --wa:#25D366;
+  --cta:#1A1A1A;
+  --cta-ink:#FBF9F5;
+  --card:#FFFFFF;
+  --sans:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  box-sizing:border-box;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:400 15.5px/1.55 var(--sans);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  min-height:100dvh;
+}
+button{font-family:inherit}
+input,textarea,select{font-family:inherit}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+[hidden],.hide{display:none!important}
+
+.wrap{max-width:880px;margin:0 auto;padding:0 20px}
+
+/* ---------- Top nav ---------- */
+header.top{
+  position:sticky;top:0;z-index:20;
+  background:rgba(251,249,245,.92);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  padding-top:env(safe-area-inset-top,0px);
+}
+header.top .wrap{
+  display:flex;align-items:center;justify-content:space-between;
+  height:60px;
+}
+.logo{
+  font-size:15px;font-weight:800;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink);
+}
+.top-actions{display:flex;align-items:center;gap:8px}
+.link{
+  background:none;border:0;cursor:pointer;
+  font:600 14px var(--sans);
+  color:var(--muted);
+  padding:8px 12px;border-radius:8px;
+  transition:color .15s,background .15s;
+}
+.link:hover{color:var(--ink);background:var(--soft)}
+
+/* ---------- Page ---------- */
+main{padding:24px 0 80px}
+
+/* ---------- Store banner ---------- */
+.banner{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-bottom:24px;
+}
+.banner-copy{flex:1;min-width:0}
+.banner-label{
+  font-size:10px;font-weight:800;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--faint);
+  margin-bottom:6px;
+}
+.banner-name{
+  font-size:19px;font-weight:800;letter-spacing:-.02em;
+  line-height:1.2;margin:0 0 4px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.banner-link{
+  font:500 13px ui-monospace,"SF Mono",Menlo,monospace;
+  color:var(--muted);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  display:block;
+}
+.banner-actions{display:flex;gap:8px;flex-shrink:0}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  font:700 14px/1 var(--sans);
+  background:var(--cta);color:var(--cta-ink);
+  padding:12px 18px;border-radius:999px;
+  border:0;cursor:pointer;
+  letter-spacing:-.005em;
+  transition:transform .15s,opacity .15s;
+  white-space:nowrap;
+}
+.btn:hover:not(:disabled){opacity:.9;transform:translateY(-1px)}
+.btn:active:not(:disabled){transform:translateY(0)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.ghost:hover:not(:disabled){border-color:var(--ink);background:transparent}
+.btn.small{padding:10px 16px;font-size:13px}
+.btn.wa{background:var(--wa);color:#073b1b;padding:12px 16px;font-size:13px}
+
+/* ---------- Onboarding checklist ---------- */
+.checklist{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:24px;
+}
+.checklist h2{
+  font-size:16px;font-weight:800;letter-spacing:-.02em;
+  margin:0 0 14px;
+}
+.checklist ol{
+  list-style:none;margin:0;padding:0;
+  display:grid;gap:10px;
+}
+.checklist li{
+  display:flex;align-items:center;gap:12px;
+  font-size:14.5px;font-weight:500;
+  color:var(--ink-2);
+}
+.checklist li .tick{
+  flex-shrink:0;
+  width:20px;height:20px;border-radius:50%;
+  border:1.5px solid var(--line);
+  display:grid;place-items:center;
+  font-size:11px;font-weight:800;
+  color:var(--faint);
+  background:var(--bg);
+}
+.checklist li.done .tick{
+  background:var(--ink);color:var(--cta-ink);border-color:var(--ink);
+}
+.checklist li.done span.t{color:var(--faint);text-decoration:line-through;text-decoration-thickness:1.5px}
+.checklist .link{font-size:13px;font-weight:700;padding:4px 8px;color:var(--accent)}
+
+/* ---------- Tabs ---------- */
+.tabs{
+  display:flex;gap:4px;
+  border-bottom:1px solid var(--line);
+  margin-bottom:20px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  background:none;border:0;cursor:pointer;
+  font:600 14px var(--sans);
+  color:var(--muted);
+  padding:12px 14px;
+  border-bottom:2px solid transparent;
+  margin-bottom:-1px;
+  white-space:nowrap;
+  transition:color .15s,border-color .15s;
+}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{
+  color:var(--ink);
+  border-bottom-color:var(--ink);
+  font-weight:700;
+}
+
+/* ---------- Cards ---------- */
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:16px;
+}
+.card h3{
+  font-size:15px;font-weight:800;letter-spacing:-.015em;
+  margin:0 0 16px;
+}
+
+/* ---------- Product list ---------- */
+.toprow{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;margin-bottom:16px;
+}
+.toprow h2{
+  font-size:20px;font-weight:800;letter-spacing:-.025em;
+  margin:0;
+}
+.count{
+  font:600 13px var(--sans);
+  color:var(--muted);
+  background:var(--soft);
+  padding:4px 10px;border-radius:999px;
+}
+.plist{display:grid;gap:8px}
+.prod{
+  display:grid;grid-template-columns:64px 1fr;
+  gap:14px;align-items:center;
+  padding:12px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+}
+.prod .th{
+  width:64px;height:64px;border-radius:10px;
+  background:var(--soft);color:var(--muted);
+  display:grid;place-items:center;
+  font:800 20px var(--sans);
+  overflow:hidden;
+  flex-shrink:0;
+}
+.prod .th img{width:100%;height:100%;object-fit:cover}
+.prod .nm{
+  font-size:14.5px;font-weight:700;
+  letter-spacing:-.01em;line-height:1.3;
+  margin-bottom:2px;
+}
+.prod .pr{
+  font-size:13px;font-weight:600;
+  color:var(--muted);
+}
+.prod .acts{
+  display:flex;gap:12px;margin-top:8px;
+}
+.prod .acts button{
+  background:none;border:0;cursor:pointer;
+  font:600 12.5px var(--sans);
+  color:var(--muted);
+  padding:0;
+  transition:color .15s;
+}
+.prod .acts button:hover{color:var(--ink)}
+.prod .acts button.danger:hover{color:var(--danger)}
+
+.pill{
+  display:inline-block;
+  font:700 10.5px var(--sans);
+  letter-spacing:.06em;text-transform:uppercase;
+  padding:3px 8px;border-radius:999px;
+  background:var(--soft);color:var(--muted);
+  margin-left:4px;
+}
+.pill.accent{background:var(--accent-soft);color:var(--accent)}
+
+/* ---------- Form fields ---------- */
+.field{display:block;margin-bottom:16px}
+.field > span{
+  display:block;
+  font-size:13px;font-weight:600;
+  color:var(--ink);
+  margin-bottom:8px;
+  letter-spacing:-.005em;
+}
+.field input[type="text"],
+.field input[type="tel"],
+.field input[type="email"],
+.field input[type="number"],
+.field input[type="password"],
+.field textarea,
+.field select{
+  width:100%;
+  font:500 15px var(--sans);
+  padding:12px 14px;
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  background:#fff;
+  color:var(--ink);
+  transition:border-color .15s,box-shadow .15s;
+  -webkit-appearance:none;
+  appearance:none;
+}
+.field textarea{
+  min-height:80px;resize:vertical;
+  line-height:1.5;
+}
+.field input:focus,
+.field textarea:focus{
+  outline:none;
+  border-color:var(--cta);
+  box-shadow:0 0 0 3px rgba(26,26,26,.06);
+}
+.field input::placeholder,
+.field textarea::placeholder{color:var(--faint)}
+.field small{
+  display:block;
+  margin-top:6px;
+  font-size:12.5px;font-weight:500;
+  color:var(--faint);
+  line-height:1.45;
+}
+.field small b{color:var(--muted);font-weight:600}
+
+.err{
+  min-height:20px;
+  font-size:13.5px;font-weight:600;
+  color:var(--danger);
+  margin-bottom:8px;
+  letter-spacing:-.005em;
+}
+
+/* ---------- Product dialog ---------- */
+dialog{
+  border:0;padding:0;background:transparent;
+  max-width:520px;width:calc(100% - 32px);
+  margin:auto;
+}
+dialog::backdrop{
+  background:rgba(15,15,15,.45);
+  backdrop-filter:blur(2px);
+  -webkit-backdrop-filter:blur(2px);
+}
+.dlg{
+  background:var(--card);
+  border-radius:18px;
+  overflow:hidden;
+  max-height:calc(100dvh - 48px);
+  display:flex;flex-direction:column;
+}
+.dlg .hd{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 20px;
+  border-bottom:1px solid var(--line);
+}
+.dlg .hd h2{
+  font-size:17px;font-weight:800;letter-spacing:-.02em;
+  margin:0;
+}
+.close{
+  background:none;border:0;cursor:pointer;
+  font-size:22px;line-height:1;
+  color:var(--muted);
+  padding:4px 8px;border-radius:8px;
+  transition:background .15s,color .15s;
+}
+.close:hover{background:var(--soft);color:var(--ink)}
+.dlg .bd{
+  padding:20px;
+  overflow-y:auto;
+  flex:1;
+}
+.dlg .ft{
+  display:flex;gap:8px;justify-content:flex-end;
+  padding:16px 20px;
+  border-top:1px solid var(--line);
+  background:var(--card);
+}
+.dlg .ft .btn{flex:0 0 auto}
+.dlg .bd .field:last-of-type{margin-bottom:0}
+
+/* ---------- Photo uploader ---------- */
+.thumbs{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));
+  gap:8px;margin-bottom:10px;
+}
+.thumb{
+  position:relative;
+  aspect-ratio:1;border-radius:10px;
+  overflow:hidden;background:var(--soft);
+  border:1px solid var(--line);
+}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb button{
+  position:absolute;top:4px;right:4px;
+  width:22px;height:22px;border-radius:50%;
+  background:rgba(15,15,15,.75);color:#fff;
+  border:0;cursor:pointer;
+  font-size:14px;line-height:1;
+  display:grid;place-items:center;
+}
+.thumb button:hover{background:var(--danger)}
+.thumbs:empty{display:none}
+#pfile{
+  font:500 13px var(--sans);
+  color:var(--muted);
+  width:100%;
+  padding:10px;
+  border:1.5px dashed var(--line);
+  border-radius:10px;
+  background:var(--bg);
+  cursor:pointer;
+}
+#pfile::file-selector-button{
+  font:600 13px var(--sans);
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:7px 12px;
+  margin-right:10px;
+  cursor:pointer;
+  color:var(--ink);
+}
+
+/* checkbox row */
+.field input[type="checkbox"]{
+  width:18px;height:18px;
+  accent-color:var(--ink);
+  margin-right:8px;
+  vertical-align:middle;
+}
+
+/* ---------- Plan tab ---------- */
+.plan-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:12px;margin-bottom:6px;
+}
+.plan-head .label{
+  font-size:10px;font-weight:800;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--faint);
+}
+.plan-head .name{
+  font-size:26px;font-weight:800;
+  letter-spacing:-.03em;line-height:1;
+  margin-top:8px;
+}
+.plan-current{
+  font-size:13px;color:var(--muted);
+  margin-top:6px;
+}
+.plan-row{
+  padding:16px 0;
+  border-top:1px solid var(--line);
+}
+.plan-row:last-child{padding-bottom:0}
+.plan-row:first-child{border-top:0;padding-top:0}
+.plan-row h3{
+  font-size:16px;font-weight:800;letter-spacing:-.02em;
+  margin:0 0 4px;
+  display:flex;align-items:center;gap:8px;
+}
+.plan-row .price{
+  font-size:14px;font-weight:700;
+  color:var(--ink);margin-bottom:8px;
+}
+.plan-row .price small{font-weight:500;color:var(--muted)}
+.plan-row ul{
+  list-style:none;padding:0;margin:0;
+  color:var(--muted);font-size:13.5px;
+  display:grid;gap:2px;
+}
+.plan-row.current{
+  background:var(--accent-soft);
+  margin:0 -20px;padding:16px 20px;
+  border-radius:12px;
+}
+.bankbox{
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:12px 14px;
+  margin-bottom:12px;
+  font-size:13px;
+}
+.bankbox div{
+  display:flex;justify-content:space-between;gap:12px;
+  padding:4px 0;
+}
+.bankbox span{color:var(--muted)}
+.bankbox b{font-weight:700;color:var(--ink)}
+
+/* ---------- Toast ---------- */
+#toast{
+  position:fixed;
+  left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));
+  transform:translate(-50%,140%);
+  background:var(--ink);color:var(--cta-ink);
+  font:600 14px var(--sans);
+  padding:12px 20px;border-radius:999px;
+  box-shadow:0 10px 30px -10px rgba(15,15,15,.5);
+  transition:transform .3s cubic-bezier(.2,.8,.3,1);
+  z-index:100;
+  max-width:calc(100% - 40px);
+  text-align:center;
+}
+#toast.show{transform:translate(-50%,0)}
+
+/* ---------- Desktop ---------- */
+@media (min-width:640px){
+  .wrap{padding:0 32px}
+  main{padding:32px 0 100px}
+  header.top .wrap{height:68px}
+  .logo{font-size:16px}
+  .banner{padding:24px;gap:20px}
+  .banner-name{font-size:22px}
+  .card{padding:24px}
+  .prod{grid-template-columns:76px 1fr;padding:14px}
+  .prod .th{width:76px;height:76px}
+  .dlg .hd{padding:22px 24px}
+  .dlg .bd{padding:24px}
+  .dlg .ft{padding:18px 24px}
+}
+
+@media (min-width:900px){
+  .wrap{max-width:920px}
+}
+</style>
 <script src="/config.js"></script>
 </head>
 <body>
-<header class="top"><div class="wrap row"><a class="logo" href="/">BIOSHOP</a><button class="link" id="logout" type="button">Log out</button></div></header>
-<main class="wrap main" id="app"><p class="muted">Loading your store…</p></main>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="/">BioStore</a>
+    <div class="top-actions">
+      <button class="link" id="logout" type="button">Log out</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="app"><p class="muted">Loading your store…</p></main>
 
 <dialog id="pdlg">
   <form class="dlg" id="pform" novalidate>
-    <div class="hd"><h2 id="ptitle">Add a product</h2><button type="button" class="close" id="px" aria-label="Close">×</button></div>
+    <div class="hd">
+      <h2 id="ptitle">Add a product</h2>
+      <button type="button" class="close" id="px" aria-label="Close">×</button>
+    </div>
     <div class="bd">
-      <label class="field"><span>Product name</span><input type="text" id="pname" maxlength="80" autocomplete="off"></label>
-      <label class="field"><span>Price (₦)</span><input type="number" id="pprice" inputmode="numeric" min="1" step="1" placeholder="15000"></label>
-      <label class="field"><span>Description (optional)</span><textarea id="pdesc" maxlength="500" placeholder="Size, colour, delivery details…"></textarea></label>
-      <label class="field hide" id="pstockrow"><span><input type="checkbox" id="pstock" checked> In stock</span></label>
+      <label class="field">
+        <span>Product name</span>
+        <input type="text" id="pname" maxlength="80" autocomplete="off" placeholder="Ankara tote bag">
+      </label>
+      <label class="field">
+        <span>Price (₦)</span>
+        <input type="number" id="pprice" inputmode="numeric" min="1" step="1" placeholder="15000">
+      </label>
+      <label class="field">
+        <span>Description <small style="display:inline;font-weight:500;color:var(--faint)">(optional)</small></span>
+        <textarea id="pdesc" maxlength="500" placeholder="Size, colour, delivery details…"></textarea>
+      </label>
+      <label class="field hide" id="pstockrow">
+        <span><input type="checkbox" id="pstock" checked> In stock</span>
+      </label>
       <div class="field">
-        <span>Photos <small style="display:inline;font-weight:400;text-transform:none;letter-spacing:0" id="pphotohint"></small></span>
+        <span>Photos <small style="display:inline;font-weight:500;color:var(--faint)" id="pphotohint"></small></span>
         <div class="thumbs" id="pthumbs"></div>
         <input type="file" id="pfile" accept="image/*" multiple>
       </div>
       <div class="err" id="perr" role="alert"></div>
     </div>
-    <div class="ft"><button class="btn ghost small" id="pcancel" type="button">Cancel</button><button class="btn small" id="psave" type="submit">Save</button></div>
+    <div class="ft">
+      <button class="btn ghost small" id="pcancel" type="button">Cancel</button>
+      <button class="btn small" id="psave" type="submit">Save product</button>
+    </div>
   </form>
 </dialog>
+
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -62,124 +599,174 @@ async function load() { S.me = await api("GET", "/api/me"); render(); }
 function storeUrl() { return location.origin + "/store/" + S.me.store.slug; }
 
 function render() {
-  var m = S.me, st = m.store, lim = m.limits;
+  var m = S.me, st = m.store;
   var named = st.name !== "My store";
   var contact = !!(st.whatsapp && st.accountNumber);
   var hasProduct = m.products.length > 0;
   var allDone = named && contact && hasProduct;
 
-  var html = '<div class="card"><div class="linkcard"><div><div class="muted" style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px">Your store link</div><code>' + esc(location.host + "/store/" + st.slug) + '</code></div>' +
-    '<div class="btnrow"><button class="btn small ghost" data-act="copylink">Copy</button><a class="btn small" href="/store/' + esc(st.slug) + '" target="_blank" rel="noopener">View store</a></div></div></div>';
+  var html = '<div class="banner">' +
+    '<div class="banner-copy">' +
+      '<div class="banner-label">Your store</div>' +
+      '<h1 class="banner-name">' + esc(named ? st.name : "Untitled store") + '</h1>' +
+      '<span class="banner-link">' + esc(location.host + "/store/" + st.slug) + '</span>' +
+    '</div>' +
+    '<div class="banner-actions">' +
+      '<button class="btn ghost small" data-act="copylink">Copy link</button>' +
+      '<a class="btn small" href="/store/' + esc(st.slug) + '" target="_blank" rel="noopener">View store</a>' +
+    '</div>' +
+  '</div>';
 
   if (!allDone) {
-    html += '<div class="card"><h2 style="font-size:20px;margin-bottom:14px">Get your store ready</h2><ol class="steps">' +
-      step(named, "Name your store and choose your link", "settings") +
-      step(contact, "Add your WhatsApp number and bank details", "settings") +
-      step(hasProduct, "Add your first product", "add") +
-      '<li><span class="tick">4</span><span class="t">Copy your link and paste it in your bio</span></li></ol></div>';
+    html += '<div class="checklist">' +
+      '<h2>Get your store ready</h2>' +
+      '<ol>' +
+        step(named, "Name your store", "settings") +
+        step(contact, "Add WhatsApp and bank details", "settings") +
+        step(hasProduct, "Add your first product", "add") +
+        '<li><span class="tick">4</span><span class="t">Copy your link into your Instagram bio</span></li>' +
+      '</ol>' +
+    '</div>';
   }
 
-  html += '<div class="tabs" role="tablist">' + tab("products", "Products") + tab("settings", "Store details") + tab("plan", "Plan") + '</div>';
+  html += '<div class="tabs" role="tablist">' +
+    tab("products", "Products") +
+    tab("settings", "Store details") +
+    tab("plan", "Plan") +
+  '</div>';
+
   html += S.tab === "products" ? productsTab() : S.tab === "settings" ? settingsTab() : planTab();
   $("app").innerHTML = html;
 }
 
 function step(done, text, go) {
-  return '<li class="' + (done ? "done" : "") + '"><span class="tick">' + (done ? "✓" : "") + '</span><span class="t">' + esc(text) + "</span>" +
-    (done ? "" : ' <button class="link" data-act="go" data-go="' + go + '" style="font-size:11px">Do this</button>') + "</li>";
+  return '<li class="' + (done ? "done" : "") + '">' +
+    '<span class="tick">' + (done ? "✓" : "") + '</span>' +
+    '<span class="t">' + esc(text) + '</span>' +
+    (done ? "" : ' <button class="link" data-act="go" data-go="' + go + '">Do this</button>') +
+  '</li>';
 }
 function tab(id, label) { return '<button class="tab" role="tab" data-act="tab" data-tab="' + id + '" aria-selected="' + (S.tab === id) + '">' + label + "</button>"; }
 function limitText(n) { return n >= 100000 ? "Unlimited" : String(n); }
 
 function productsTab() {
   var m = S.me, lim = m.limits, atLimit = m.products.length >= lim.products;
-  var h = '<div class="toprow"><h2>Your products</h2><div class="count">' + m.products.length + (lim.products >= 100000 ? "" : " / " + lim.products) + "</div></div>";
-  h += '<div style="margin-bottom:18px"><button class="btn small" data-act="add"' + (atLimit ? " disabled" : "") + ">+ Add product</button>";
-  if (atLimit) h += ' <span class="muted" style="margin-left:10px;font-size:13px">Your ' + esc(lim.planName) + ' plan is full. <button class="link" data-act="go" data-go="plan">Upgrade</button></span>';
+  var h = '<div class="toprow"><h2>Products</h2><div class="count">' + m.products.length + (lim.products >= 100000 ? "" : " / " + lim.products) + "</div></div>";
+  h += '<div style="margin-bottom:18px"><button class="btn small" data-act="add"' + (atLimit ? " disabled" : "") + '>+ Add product</button>';
+  if (atLimit) h += ' <span style="margin-left:10px;font-size:13px;color:var(--muted)">Your ' + esc(lim.planName) + ' plan is full. <button class="link" data-act="go" data-go="plan" style="padding:0 4px;color:var(--accent);font-weight:700">Upgrade</button></span>';
   h += "</div>";
-  if (!m.products.length) return h + '<p class="muted" style="padding:36px 0">No products yet.</p>';
+  if (!m.products.length) return h + '<div class="card"><p style="margin:0;color:var(--muted);text-align:center;padding:32px 0">No products yet. Add your first one.</p></div>';
   h += '<div class="plist">';
   m.products.forEach(function (p) {
     var th = p.images.length ? '<img src="' + esc(p.images[0].url) + '" alt="">' : esc(p.name.charAt(0).toUpperCase());
-    h += '<div class="prod"><div class="th">' + th + '</div><div><div class="nm">' + esc(p.name) + '</div><div class="pr">' + naira(p.price) + "</div>" +
-      (p.inStock ? "" : ' <span class="pill">Sold out</span>') + (p.hidden ? ' <span class="pill accent">Hidden</span>' : "") +
-      '<div class="acts"><button data-act="edit" data-id="' + esc(p.id) + '">Edit</button><button class="danger" data-act="del" data-id="' + esc(p.id) + '">Delete</button></div></div></div>';
+    h += '<div class="prod">' +
+      '<div class="th">' + th + '</div>' +
+      '<div>' +
+        '<div class="nm">' + esc(p.name) + (p.hidden ? ' <span class="pill accent">Hidden</span>' : "") + (p.inStock ? "" : ' <span class="pill">Sold out</span>') + '</div>' +
+        '<div class="pr">' + naira(p.price) + '</div>' +
+        '<div class="acts">' +
+          '<button data-act="edit" data-id="' + esc(p.id) + '">Edit</button>' +
+          '<button class="danger" data-act="del" data-id="' + esc(p.id) + '">Delete</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
   });
   return h + "</div>";
 }
 
 function settingsTab() {
   var st = S.me.store;
-  var avatarHtml = st.avatarUrl ? '<img src="' + esc(st.avatarUrl) + '" alt="">' : esc((st.name || "?").charAt(0).toUpperCase());
-  var coverHtml = st.coverUrl ? '<img src="' + esc(st.coverUrl) + '" alt="">' : 'No cover yet';
   return '<form id="sform" novalidate>' +
     '<div class="card">' +
-    '<h3 style="font:400 18px var(--serif);margin-bottom:14px;letter-spacing:-0.01em">Branding</h3>' +
-    '<div class="branding-row">' +
-    '<div class="branding-item"><div class="branding-preview" id="avatarPrev">' + avatarHtml + '</div><label class="btn ghost small"><input type="file" id="avatarInput" accept="image/*" hidden>Photo</label></div>' +
-    '<div class="branding-item wide"><div class="branding-preview cover" id="coverPrev">' + coverHtml + '</div><label class="btn ghost small"><input type="file" id="coverInput" accept="image/*" hidden>Cover</label></div>' +
-    '</div>' +
+      '<h3>Store</h3>' +
+      field("Store name", '<input type="text" id="sname" maxlength="60" value="' + esc(st.name === "My store" ? "" : st.name) + '" placeholder="Adaeze\'s Closet">') +
+      field("Store link", '<input type="text" id="sslug" maxlength="30" value="' + esc(st.slug) + '" autocapitalize="none" autocomplete="off">', "Your link will be <b>" + esc(location.host) + "/store/<span id=\"sslugprev\">" + esc(st.slug) + "</span></b>") +
+      field("Short bio (optional)", '<textarea id="sbio" maxlength="200" placeholder="What do you sell? Where are you based?">' + esc(st.bio) + "</textarea>") +
     '</div>' +
     '<div class="card">' +
-    field("Store name", '<input type="text" id="sname" maxlength="60" value="' + esc(st.name === "My store" ? "" : st.name) + '" placeholder="Adaeze\'s Closet">') +
-    field("Store link", '<input type="text" id="sslug" maxlength="30" value="' + esc(st.slug) + '" autocapitalize="none" autocomplete="off">', "Your link will be <b>" + esc(location.host) + "/store/<span id=\"sslugprev\">" + esc(st.slug) + "</span></b>") +
-    field("Short bio (optional)", '<textarea id="sbio" maxlength="200" placeholder="What do you sell? Where are you based?">' + esc(st.bio) + "</textarea>") +
-    field("WhatsApp number", '<input type="tel" id="swa" inputmode="tel" value="' + esc(st.whatsapp) + '" placeholder="08012345678">', "Orders open a chat with this number.") +
-    "</div>" +
-    '<div class="card">' +
-    '<h3 style="font:400 18px var(--serif);margin-bottom:14px;letter-spacing:-0.01em">Bank details</h3>' +
-    field("Bank name", '<input type="text" id="sbank" maxlength="60" value="' + esc(st.bankName) + '" placeholder="GTBank">') +
-    field("Account name", '<input type="text" id="saname" maxlength="80" value="' + esc(st.accountName) + '">') +
-    field("Account number", '<input type="text" id="sanum" inputmode="numeric" maxlength="10" value="' + esc(st.accountNumber) + '" placeholder="0123456789">') +
-    "</div>" +
-    '<div class="err" id="serr" role="alert"></div><button class="btn" type="submit">Save details</button></form>';
+      '<h3>Contact & payment</h3>' +
+      field("WhatsApp number", '<input type="tel" id="swa" inputmode="tel" value="' + esc(st.whatsapp) + '" placeholder="08012345678">', "Orders open a chat with this number.") +
+      field("Bank name", '<input type="text" id="sbank" maxlength="60" value="' + esc(st.bankName) + '" placeholder="GTBank">') +
+      field("Account name", '<input type="text" id="saname" maxlength="80" value="' + esc(st.accountName) + '" placeholder="Adaeze Okafor">') +
+      field("Account number", '<input type="text" id="sanum" inputmode="numeric" maxlength="10" value="' + esc(st.accountNumber) + '" placeholder="0123456789">') +
+    '</div>' +
+    '<div class="err" id="serr" role="alert"></div>' +
+    '<button class="btn" type="submit">Save details</button>' +
+  '</form>';
 }
 function field(label, input, hint) { return '<label class="field"><span>' + label + "</span>" + input + (hint ? "<small>" + hint + "</small>" : "") + "</label>"; }
 
 function planTab() {
   var m = S.me, u = m.user, plans = m.plans, now = Date.now();
-  var h = '<div class="card"><div class="muted" style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase">Your plan</div><h2 style="font:400 26px var(--serif);margin-top:6px;letter-spacing:-0.02em">' + esc(m.limits.planName) + "</h2>";
+  var h = '<div class="card">' +
+    '<div class="plan-head">' +
+      '<div>' +
+        '<div class="label">Your plan</div>' +
+        '<div class="name">' + esc(m.limits.planName) + '</div>' +
+      '</div>' +
+    '</div>';
   if (u.plan !== "free" && u.planExpiresAt) {
-    h += u.planExpiresAt > now ? '<p class="muted" style="margin-top:6px;font-size:13px">Active until ' + dateStr(u.planExpiresAt) + ".</p>"
-      : '<p style="margin-top:6px;font-size:13px">Your ' + esc(plans[u.plan].name) + " plan ended on " + dateStr(u.planExpiresAt) + ". Renew to show all your products again.</p>";
+    h += u.planExpiresAt > now
+      ? '<p class="plan-current">Active until ' + dateStr(u.planExpiresAt) + '.</p>'
+      : '<p class="plan-current">Your ' + esc(plans[u.plan].name) + ' plan ended on ' + dateStr(u.planExpiresAt) + '. Renew to show all your products again.</p>';
   }
-  h += "</div>";
-  h += '<div class="card"><h3 style="font:400 18px var(--serif);margin-bottom:12px">Plans</h3>';
+  h += '</div>';
+
+  h += '<div class="card"><h3>Available plans</h3>';
   ["free", "starter", "pro"].forEach(function (k) {
     var p = plans[k];
-    h += '<div class="plan' + (m.limits.planName === p.name ? " current" : "") + '"><h3>' + p.name + (m.limits.planName === p.name ? ' <span class="pill accent">Current</span>' : "") + "</h3>" +
-      '<div class="price">' + (p.price ? naira(p.price) + " a month" : "₦0") + "</div><ul><li>" + limitText(p.products) + " products</li><li>" + p.images + " image" + (p.images > 1 ? "s" : "") + " per product</li></ul></div>";
+    var isCurrent = m.limits.planName === p.name;
+    h += '<div class="plan-row' + (isCurrent ? " current" : "") + '">' +
+      '<h3>' + p.name + (isCurrent ? ' <span class="pill accent">Current</span>' : "") + '</h3>' +
+      '<div class="price">' + (p.price ? naira(p.price) + ' <small>per month</small>' : '<small>Free forever</small>') + '</div>' +
+      '<ul>' +
+        '<li>' + limitText(p.products) + ' products</li>' +
+        '<li>' + p.images + ' image' + (p.images > 1 ? "s" : "") + ' per product</li>' +
+      '</ul>' +
+    '</div>';
   });
-  h += "</div>";
-  h += '<div class="card"><h3 style="font:400 18px var(--serif);margin-bottom:10px">How to upgrade</h3><p class="pill accent" style="margin:0 0 12px">Launch: 50% off your first month</p>';
+  h += '</div>';
+
+  h += '<div class="card"><h3>How to upgrade</h3>';
   if (CFG.accountNumber) {
-    h += "<p style=\"font-size:13px;color:var(--muted);margin:0 0 10px\">Send the plan price to BIOSHOP's account, then message us on WhatsApp.</p><div class=\"bankbox\">" +
-      row("Bank", CFG.bankName) + row("Account name", CFG.accountName) + row("Account number", CFG.accountNumber) + "</div>";
-  } else h += "<p style=\"color:var(--muted);font-size:13px\">Message BIOSHOP on WhatsApp to upgrade.</p>";
+    h += '<p style="font-size:13.5px;color:var(--muted);margin:0 0 12px">Send the plan price to the account below, then message us on WhatsApp.</p>' +
+      '<div class="bankbox">' +
+        row("Bank", CFG.bankName) +
+        row("Account name", CFG.accountName) +
+        row("Account number", CFG.accountNumber) +
+      '</div>';
+  } else {
+    h += '<p style="color:var(--muted);font-size:13.5px;margin:0 0 12px">Message BioStore on WhatsApp to upgrade.</p>';
+  }
   if (CFG.whatsapp) {
     ["starter", "pro"].forEach(function (k) {
-      var text = "Hi BIOSHOP, I'd like the " + plans[k].name + " plan. My account email is " + u.email + ".";
-      h += '<a class="btn wa" style="margin:6px 8px 0 0;padding:12px 18px;font-size:10.5px" target="_blank" rel="noopener" href="https://wa.me/' + esc(CFG.whatsapp) + "?text=" + encodeURIComponent(text) + '">Message us about ' + plans[k].name + "</a>";
+      var text = "Hi BioStore, I'd like the " + plans[k].name + " plan. My account email is " + u.email + ".";
+      h += '<a class="btn wa" style="margin:4px 6px 0 0" target="_blank" rel="noopener" href="https://wa.me/' + esc(CFG.whatsapp) + "?text=" + encodeURIComponent(text) + '">Ask about ' + plans[k].name + '</a>';
     });
   }
-  return h + "</div>";
+  return h + '</div>';
 }
 function row(k, v) { return v ? "<div><span>" + esc(k) + "</span><b>" + esc(v) + "</b></div>" : ""; }
 
-/* Actions */
+/* ---------- Actions ---------- */
 document.addEventListener("click", async function (e) {
   var b = e.target.closest("[data-act]");
   if (!b) return;
   var act = b.getAttribute("data-act");
   if (act === "tab") { S.tab = b.getAttribute("data-tab"); render(); }
-  else if (act === "go") { var g = b.getAttribute("data-go"); if (g === "add") { S.tab = "products"; render(); openProduct(null); } else { S.tab = g; render(); window.scrollTo({ top: 0, behavior: "smooth" }); } }
+  else if (act === "go") {
+    var g = b.getAttribute("data-go");
+    if (g === "add") { S.tab = "products"; render(); openProduct(null); }
+    else { S.tab = g; render(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+  }
   else if (act === "copylink") copy(storeUrl());
   else if (act === "add") openProduct(null);
   else if (act === "edit") openProduct(b.getAttribute("data-id"));
   else if (act === "del") {
     var p = S.me.products.find(function (x) { return x.id === b.getAttribute("data-id"); });
     if (p && confirm("Delete " + p.name + "? This can't be undone.")) {
-      try { await api("DELETE", "/api/products/" + p.id); await load(); toast("Product deleted"); } catch (x) { toast(x.message); }
+      try { await api("DELETE", "/api/products/" + p.id); await load(); toast("Product deleted"); }
+      catch (x) { toast(x.message); }
     }
   }
 });
@@ -191,7 +778,12 @@ function copy(text) {
 }
 
 document.addEventListener("input", function (e) {
-  if (e.target.id === "sslug") { var v = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""); e.target.value = v; var pv = $("sslugprev"); if (pv) pv.textContent = v; }
+  if (e.target.id === "sslug") {
+    var v = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "");
+    e.target.value = v;
+    var pv = $("sslugprev");
+    if (pv) pv.textContent = v;
+  }
 });
 
 document.addEventListener("submit", async function (e) {
@@ -200,35 +792,25 @@ document.addEventListener("submit", async function (e) {
   var err = $("serr"); err.textContent = "";
   try {
     await api("PUT", "/api/store", {
-      name: $("sname").value, slug: $("sslug").value, bio: $("sbio").value, whatsapp: $("swa").value,
-      bankName: $("sbank").value, accountName: $("saname").value, accountNumber: $("sanum").value
+      name: $("sname").value,
+      slug: $("sslug").value,
+      bio: $("sbio").value,
+      whatsapp: $("swa").value,
+      bankName: $("sbank").value,
+      accountName: $("saname").value,
+      accountNumber: $("sanum").value
     });
-    await load(); toast("Saved");
+    await load();
+    toast("Saved");
   } catch (x) { err.textContent = x.message; }
 });
 
-/* Branding uploads */
-document.addEventListener("change", async function (e) {
-  if (e.target.id !== "avatarInput" && e.target.id !== "coverInput") return;
-  var file = e.target.files[0];
-  if (!file) return;
-  var kind = e.target.id === "avatarInput" ? "avatar" : "cover";
-  try {
-    var r = await fetch("/api/store/branding?kind=" + kind, {
-      method: "POST",
-      headers: { "content-type": "image/jpeg" },
-      body: file
-    });
-    var d = await r.json();
-    if (!r.ok) throw new Error(d.error || "Upload failed");
-    await load(); toast(kind === "avatar" ? "Photo updated" : "Cover updated");
-  } catch (x) { toast(x.message); }
-  e.target.value = "";
+$("logout").addEventListener("click", async function () {
+  try { await api("POST", "/api/logout", {}); } catch (e) {}
+  location.href = "/";
 });
 
-$("logout").addEventListener("click", async function () { try { await api("POST", "/api/logout", {}); } catch (e) {} location.href = "/"; });
-
-/* Product dialog */
+/* ---------- Product dialog ---------- */
 function slots() { return S.me.limits.images - P.existing.length - P.files.length; }
 
 function openProduct(id) {
@@ -248,8 +830,12 @@ function openProduct(id) {
 
 function renderThumbs() {
   var lim = S.me.limits.images, h = "";
-  P.existing.forEach(function (im, i) { h += '<div class="thumb"><img src="' + esc(im.url) + '" alt=""><button type="button" data-rm-existing="' + i + '" aria-label="Remove photo">×</button></div>'; });
-  P.files.forEach(function (f, i) { h += '<div class="thumb"><img src="' + esc(f.preview) + '" alt=""><button type="button" data-rm-new="' + i + '" aria-label="Remove photo">×</button></div>'; });
+  P.existing.forEach(function (im, i) {
+    h += '<div class="thumb"><img src="' + esc(im.url) + '" alt=""><button type="button" data-rm-existing="' + i + '" aria-label="Remove photo">×</button></div>';
+  });
+  P.files.forEach(function (f, i) {
+    h += '<div class="thumb"><img src="' + esc(f.preview) + '" alt=""><button type="button" data-rm-new="' + i + '" aria-label="Remove photo">×</button></div>';
+  });
   $("pthumbs").innerHTML = h;
   $("pphotohint").textContent = "(up to " + lim + " on " + S.me.limits.planName + ")";
   $("pfile").classList.toggle("hide", slots() <= 0);
@@ -257,31 +843,46 @@ function renderThumbs() {
 
 $("pthumbs").addEventListener("click", async function (e) {
   var ex = e.target.closest("[data-rm-existing]"), nw = e.target.closest("[data-rm-new]");
-  if (nw) { var f = P.files.splice(Number(nw.getAttribute("data-rm-new")), 1)[0]; URL.revokeObjectURL(f.preview); renderThumbs(); }
-  else if (ex) {
+  if (nw) {
+    var f = P.files.splice(Number(nw.getAttribute("data-rm-new")), 1)[0];
+    URL.revokeObjectURL(f.preview);
+    renderThumbs();
+  } else if (ex) {
     var im = P.existing[Number(ex.getAttribute("data-rm-existing"))];
-    try { await api("DELETE", "/api/images/" + im.id); P.existing = P.existing.filter(function (x) { return x.id !== im.id; }); renderThumbs(); } catch (x) { $("perr").textContent = x.message; }
+    try {
+      await api("DELETE", "/api/images/" + im.id);
+      P.existing = P.existing.filter(function (x) { return x.id !== im.id; });
+      renderThumbs();
+    } catch (x) { $("perr").textContent = x.message; }
   }
 });
 
 $("pfile").addEventListener("change", function (e) {
   var picked = Array.prototype.slice.call(e.target.files || []), room = slots();
-  if (picked.length > room) $("perr").textContent = "Only " + room + " more photo" + (room === 1 ? "" : "s") + " fit on your plan.";
-  picked.slice(0, Math.max(room, 0)).forEach(function (f) { if (/^image\//.test(f.type)) P.files.push({ file: f, preview: URL.createObjectURL(f) }); });
+  if (picked.length > room) {
+    $("perr").textContent = "Only " + room + " more photo" + (room === 1 ? "" : "s") + " fit on your plan.";
+  }
+  picked.slice(0, Math.max(room, 0)).forEach(function (f) {
+    if (/^image\//.test(f.type)) P.files.push({ file: f, preview: URL.createObjectURL(f) });
+  });
   e.target.value = "";
   renderThumbs();
 });
 
 $("px").addEventListener("click", function () { $("pdlg").close(); });
 $("pcancel").addEventListener("click", function () { $("pdlg").close(); });
-$("pdlg").addEventListener("close", function () { P.files.forEach(function (f) { URL.revokeObjectURL(f.preview); }); });
+$("pdlg").addEventListener("close", function () {
+  P.files.forEach(function (f) { URL.revokeObjectURL(f.preview); });
+});
 
 async function compress(file) {
   var bmp;
-  try { bmp = await createImageBitmap(file); } catch (e) { throw new Error("Couldn't read one of the photos."); }
+  try { bmp = await createImageBitmap(file); }
+  catch (e) { throw new Error("Couldn't read one of the photos."); }
   var scale = Math.min(1, 1000 / Math.max(bmp.width, bmp.height));
   var c = document.createElement("canvas");
-  c.width = Math.round(bmp.width * scale); c.height = Math.round(bmp.height * scale);
+  c.width = Math.round(bmp.width * scale);
+  c.height = Math.round(bmp.height * scale);
   c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
   var blob = await new Promise(function (r) { c.toBlob(r, "image/jpeg", 0.82); });
   if (!blob) throw new Error("Couldn't process that photo.");
@@ -297,24 +898,33 @@ $("pform").addEventListener("submit", async function (e) {
   if (!price || price < 1) { err.textContent = "Enter a price in naira."; return; }
   btn.disabled = true; btn.textContent = "Saving…";
   try {
-    var body = { name: name, price: price, description: $("pdesc").value, inStock: $("pstock").checked };
+    var body = {
+      name: name,
+      price: price,
+      description: $("pdesc").value,
+      inStock: $("pstock").checked
+    };
     var id = P.id;
     if (id) await api("PUT", "/api/products/" + id, body);
     else id = (await api("POST", "/api/products", body)).id;
     var failed = 0;
     for (var i = 0; i < P.files.length; i++) {
       btn.textContent = "Uploading " + (i + 1) + "/" + P.files.length + "…";
-      try { var blob = await compress(P.files[i].file); await api("POST", "/api/products/" + id + "/images", blob, "image/jpeg"); }
-      catch (x) { failed++; err.textContent = x.message; }
+      try {
+        var blob = await compress(P.files[i].file);
+        await api("POST", "/api/products/" + id + "/images", blob, "image/jpeg");
+      } catch (x) { failed++; err.textContent = x.message; }
     }
     await load();
     $("pdlg").close();
     toast(failed ? "Saved, but some photos didn't upload" : "Product saved");
   } catch (x) { err.textContent = x.message; }
-  btn.disabled = false; btn.textContent = "Save";
+  btn.disabled = false; btn.textContent = "Save product";
 });
 
-load().catch(function (x) { $("app").innerHTML = '<p class="err">' + esc(x.message) + "</p>"; });
+load().catch(function (x) {
+  $("app").innerHTML = '<div class="card"><p style="margin:0;color:var(--danger)">' + esc(x.message) + "</p></div>";
+});
 </script>
 </body>
 </html>
