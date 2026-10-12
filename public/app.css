@@ -1,5 +1,5 @@
 :root{--bg:#FBF9F5;--soft:#F3EFE8;--ink:#1A1A1A;--muted:#6B665F;--line:#E6E0D6;--accent:#C66B4F;--accent-ink:#A9533A;--danger:#B3261E;--wa:#25D366;
---serif:"Young Serif",Georgia,serif;--sans:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif}
+--serif:"Instrument Serif",Georgia,serif;--sans:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif}
 @media (prefers-color-scheme:dark){:root{--bg:#161412;--soft:#1F1C19;--ink:#F3EEE6;--muted:#A39C91;--line:#302B26;--accent:#E08A6E;--accent-ink:#E9A088;--danger:#FF8A80}}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
