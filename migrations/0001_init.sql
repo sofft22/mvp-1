@@ -37,6 +37,8 @@ CREATE TABLE product_images (
   product_id TEXT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
   store_id TEXT NOT NULL,
   key TEXT NOT NULL UNIQUE,
+  bytes BLOB NOT NULL,
+  content_type TEXT NOT NULL,
   created_at INTEGER NOT NULL
 );
 CREATE INDEX idx_images_product ON product_images(product_id, created_at);
