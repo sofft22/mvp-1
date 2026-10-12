@@ -12,8 +12,10 @@
 <div class="auth">
   <a class="logo" href="/">BIOSHOP</a>
   <h1 style="margin-top:36px">Open your free store</h1>
-  <p class="muted">Just your email and a password. You can add your first product in a minute.</p>
+  <p class="muted">Just a few details. You can add your first product in a minute.</p>
   <form id="f" novalidate>
+    <label class="field"><span>Store name</span><input type="text" name="storeName" maxlength="60" required autocomplete="organization"><small>This is what customers will see, like "Adaeze's Closet".</small></label>
+    <label class="field"><span>WhatsApp number</span><input type="tel" name="whatsapp" inputmode="tel" required autocomplete="tel" placeholder="08012345678"><small>Orders will open a chat with this number.</small></label>
     <label class="field"><span>Email</span><input type="email" name="email" autocomplete="email" inputmode="email" required></label>
     <label class="field"><span>Password</span><input type="password" name="password" autocomplete="new-password" minlength="8" required><small>At least 8 characters.</small></label>
     <div class="err" id="err" role="alert"></div>
@@ -27,11 +29,24 @@ document.getElementById("f").addEventListener("submit", async function (e) {
   var f = e.target, err = document.getElementById("err"), btn = document.getElementById("go");
   err.textContent = ""; btn.disabled = true; btn.textContent = "Creating your store…";
   try {
-    var r = await fetch("/api/signup", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email: f.email.value, password: f.password.value }) });
+    var r = await fetch("/api/signup", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        storeName: f.storeName.value,
+        whatsapp: f.whatsapp.value,
+        email: f.email.value,
+        password: f.password.value
+      })
+    });
     var d = await r.json().catch(function () { return {}; });
     if (!r.ok) throw new Error(d.error || "Something went wrong. Try again.");
     location.href = "/dashboard";
-  } catch (x) { err.textContent = x.message; btn.disabled = false; btn.textContent = "Create my store"; }
+  } catch (x) {
+    err.textContent = x.message;
+    btn.disabled = false;
+    btn.textContent = "Create my store";
+  }
 });
 </script>
 </body>
