@@ -16,10 +16,7 @@
 
 <dialog id="pdlg">
   <form class="dlg" id="pform" novalidate>
-    <div class="hd">
-      <h2 id="ptitle">Add a product</h2>
-      <button type="button" class="close" id="px" aria-label="Close">×</button>
-    </div>
+    <div class="hd"><h2 id="ptitle">Add a product</h2><button type="button" class="close" id="px" aria-label="Close">×</button></div>
     <div class="bd">
       <label class="field"><span>Product name</span><input type="text" id="pname" maxlength="80" autocomplete="off"></label>
       <label class="field"><span>Price (₦)</span><input type="number" id="pprice" inputmode="numeric" min="1" step="1" placeholder="15000"></label>
@@ -32,10 +29,7 @@
       </div>
       <div class="err" id="perr" role="alert"></div>
     </div>
-    <div class="ft">
-      <button class="btn ghost small" id="pcancel" type="button">Cancel</button>
-      <button class="btn small" id="psave" type="submit">Save product</button>
-    </div>
+    <div class="ft"><button class="btn ghost small" id="pcancel" type="button">Cancel</button><button class="btn small" id="psave" type="submit">Save</button></div>
   </form>
 </dialog>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -74,15 +68,15 @@ function render() {
   var hasProduct = m.products.length > 0;
   var allDone = named && contact && hasProduct;
 
-  var html = '<div class="card"><div class="linkcard"><div><div class="muted" style="font-size:12px;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:6px">Your store link</div><code>' + esc(location.host + "/store/" + st.slug) + '</code></div>' +
-    '<div class="btnrow"><button class="btn small ghost" data-act="copylink">Copy link</button><a class="btn small" href="/store/' + esc(st.slug) + '" target="_blank" rel="noopener">View store</a></div></div></div>';
+  var html = '<div class="card"><div class="linkcard"><div><div class="muted" style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:6px">Your store link</div><code>' + esc(location.host + "/store/" + st.slug) + '</code></div>' +
+    '<div class="btnrow"><button class="btn small ghost" data-act="copylink">Copy</button><a class="btn small" href="/store/' + esc(st.slug) + '" target="_blank" rel="noopener">View store</a></div></div></div>';
 
   if (!allDone) {
-    html += '<div class="card"><h2 style="font-size:22px;margin-bottom:16px">Get your store ready</h2><ol class="steps">' +
+    html += '<div class="card"><h2 style="font-size:20px;margin-bottom:14px">Get your store ready</h2><ol class="steps">' +
       step(named, "Name your store and choose your link", "settings") +
       step(contact, "Add your WhatsApp number and bank details", "settings") +
       step(hasProduct, "Add your first product", "add") +
-      '<li><span class="tick">4</span><span class="t">Copy your link and paste it in your Instagram or TikTok bio</span></li></ol></div>';
+      '<li><span class="tick">4</span><span class="t">Copy your link and paste it in your bio</span></li></ol></div>';
   }
 
   html += '<div class="tabs" role="tablist">' + tab("products", "Products") + tab("settings", "Store details") + tab("plan", "Plan") + '</div>';
@@ -92,7 +86,7 @@ function render() {
 
 function step(done, text, go) {
   return '<li class="' + (done ? "done" : "") + '"><span class="tick">' + (done ? "✓" : "") + '</span><span class="t">' + esc(text) + "</span>" +
-    (done ? "" : ' <button class="link" data-act="go" data-go="' + go + '" style="font-size:13px">Do this</button>') + "</li>";
+    (done ? "" : ' <button class="link" data-act="go" data-go="' + go + '" style="font-size:11px">Do this</button>') + "</li>";
 }
 function tab(id, label) { return '<button class="tab" role="tab" data-act="tab" data-tab="' + id + '" aria-selected="' + (S.tab === id) + '">' + label + "</button>"; }
 function limitText(n) { return n >= 100000 ? "Unlimited" : String(n); }
@@ -100,15 +94,15 @@ function limitText(n) { return n >= 100000 ? "Unlimited" : String(n); }
 function productsTab() {
   var m = S.me, lim = m.limits, atLimit = m.products.length >= lim.products;
   var h = '<div class="toprow"><h2>Your products</h2><div class="count">' + m.products.length + (lim.products >= 100000 ? "" : " / " + lim.products) + "</div></div>";
-  h += '<div style="margin-bottom:20px"><button class="btn small" data-act="add"' + (atLimit ? " disabled" : "") + ">+ Add product</button>";
-  if (atLimit) h += ' <span class="muted" style="margin-left:12px;font-size:14px">Your ' + esc(lim.planName) + ' plan is full. <button class="link" data-act="go" data-go="plan">Upgrade</button></span>';
+  h += '<div style="margin-bottom:18px"><button class="btn small" data-act="add"' + (atLimit ? " disabled" : "") + ">+ Add product</button>";
+  if (atLimit) h += ' <span class="muted" style="margin-left:10px;font-size:13px">Your ' + esc(lim.planName) + ' plan is full. <button class="link" data-act="go" data-go="plan">Upgrade</button></span>';
   h += "</div>";
-  if (!m.products.length) return h + '<p class="muted" style="padding:40px 0">No products yet. Add a photo, a name and a price, and customers can start ordering.</p>';
+  if (!m.products.length) return h + '<p class="muted" style="padding:36px 0">No products yet.</p>';
   h += '<div class="plist">';
   m.products.forEach(function (p) {
     var th = p.images.length ? '<img src="' + esc(p.images[0].url) + '" alt="">' : esc(p.name.charAt(0).toUpperCase());
     h += '<div class="prod"><div class="th">' + th + '</div><div><div class="nm">' + esc(p.name) + '</div><div class="pr">' + naira(p.price) + "</div>" +
-      (p.inStock ? "" : ' <span class="pill">Sold out</span>') + (p.hidden ? ' <span class="pill accent">Hidden — upgrade to show</span>' : "") +
+      (p.inStock ? "" : ' <span class="pill">Sold out</span>') + (p.hidden ? ' <span class="pill accent">Hidden</span>' : "") +
       '<div class="acts"><button data-act="edit" data-id="' + esc(p.id) + '">Edit</button><button class="danger" data-act="del" data-id="' + esc(p.id) + '">Delete</button></div></div></div>';
   });
   return h + "</div>";
@@ -116,7 +110,16 @@ function productsTab() {
 
 function settingsTab() {
   var st = S.me.store;
+  var avatarHtml = st.avatarUrl ? '<img src="' + esc(st.avatarUrl) + '" alt="">' : esc((st.name || "?").charAt(0).toUpperCase());
+  var coverHtml = st.coverUrl ? '<img src="' + esc(st.coverUrl) + '" alt="">' : 'No cover yet';
   return '<form id="sform" novalidate>' +
+    '<div class="card">' +
+    '<h3 style="font:400 18px var(--serif);margin-bottom:14px;letter-spacing:-0.01em">Branding</h3>' +
+    '<div class="branding-row">' +
+    '<div class="branding-item"><div class="branding-preview" id="avatarPrev">' + avatarHtml + '</div><label class="btn ghost small"><input type="file" id="avatarInput" accept="image/*" hidden>Photo</label></div>' +
+    '<div class="branding-item wide"><div class="branding-preview cover" id="coverPrev">' + coverHtml + '</div><label class="btn ghost small"><input type="file" id="coverInput" accept="image/*" hidden>Cover</label></div>' +
+    '</div>' +
+    '</div>' +
     '<div class="card">' +
     field("Store name", '<input type="text" id="sname" maxlength="60" value="' + esc(st.name === "My store" ? "" : st.name) + '" placeholder="Adaeze\'s Closet">') +
     field("Store link", '<input type="text" id="sslug" maxlength="30" value="' + esc(st.slug) + '" autocapitalize="none" autocomplete="off">', "Your link will be <b>" + esc(location.host) + "/store/<span id=\"sslugprev\">" + esc(st.slug) + "</span></b>") +
@@ -124,10 +127,10 @@ function settingsTab() {
     field("WhatsApp number", '<input type="tel" id="swa" inputmode="tel" value="' + esc(st.whatsapp) + '" placeholder="08012345678">', "Orders open a chat with this number.") +
     "</div>" +
     '<div class="card">' +
-    '<h3 style="font:400 20px var(--serif);margin-bottom:16px;letter-spacing:-0.01em">Bank details for transfers</h3>' +
+    '<h3 style="font:400 18px var(--serif);margin-bottom:14px;letter-spacing:-0.01em">Bank details</h3>' +
     field("Bank name", '<input type="text" id="sbank" maxlength="60" value="' + esc(st.bankName) + '" placeholder="GTBank">') +
     field("Account name", '<input type="text" id="saname" maxlength="80" value="' + esc(st.accountName) + '">') +
-    field("Account number", '<input type="text" id="sanum" inputmode="numeric" maxlength="10" value="' + esc(st.accountNumber) + '" placeholder="0123456789">', "10 digits. Customers see this when they choose to pay by transfer.") +
+    field("Account number", '<input type="text" id="sanum" inputmode="numeric" maxlength="10" value="' + esc(st.accountNumber) + '" placeholder="0123456789">') +
     "</div>" +
     '<div class="err" id="serr" role="alert"></div><button class="btn" type="submit">Save details</button></form>';
 }
@@ -135,44 +138,42 @@ function field(label, input, hint) { return '<label class="field"><span>' + labe
 
 function planTab() {
   var m = S.me, u = m.user, plans = m.plans, now = Date.now();
-  var h = '<div class="card"><div class="muted" style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase">Your plan</div><h2 style="font:400 32px var(--serif);margin-top:8px;letter-spacing:-0.02em">' + esc(m.limits.planName) + "</h2>";
+  var h = '<div class="card"><div class="muted" style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase">Your plan</div><h2 style="font:400 26px var(--serif);margin-top:6px;letter-spacing:-0.02em">' + esc(m.limits.planName) + "</h2>";
   if (u.plan !== "free" && u.planExpiresAt) {
-    h += u.planExpiresAt > now ? '<p class="muted" style="margin-top:8px">Active until ' + dateStr(u.planExpiresAt) + ".</p>"
-      : '<p style="margin-top:8px">Your ' + esc(plans[u.plan].name) + " plan ended on " + dateStr(u.planExpiresAt) + ". Renew to show all your products again.</p>";
+    h += u.planExpiresAt > now ? '<p class="muted" style="margin-top:6px;font-size:13px">Active until ' + dateStr(u.planExpiresAt) + ".</p>"
+      : '<p style="margin-top:6px;font-size:13px">Your ' + esc(plans[u.plan].name) + " plan ended on " + dateStr(u.planExpiresAt) + ". Renew to show all your products again.</p>";
   }
   h += "</div>";
-  h += '<div class="card"><h3 style="font:400 20px var(--serif);margin-bottom:14px">Plans</h3>';
+  h += '<div class="card"><h3 style="font:400 18px var(--serif);margin-bottom:12px">Plans</h3>';
   ["free", "starter", "pro"].forEach(function (k) {
     var p = plans[k];
     h += '<div class="plan' + (m.limits.planName === p.name ? " current" : "") + '"><h3>' + p.name + (m.limits.planName === p.name ? ' <span class="pill accent">Current</span>' : "") + "</h3>" +
       '<div class="price">' + (p.price ? naira(p.price) + " a month" : "₦0") + "</div><ul><li>" + limitText(p.products) + " products</li><li>" + p.images + " image" + (p.images > 1 ? "s" : "") + " per product</li></ul></div>";
   });
   h += "</div>";
-  h += '<div class="card"><h3 style="font:400 20px var(--serif);margin-bottom:10px">How to upgrade</h3><p class="pill accent" style="margin:0 0 14px">Launch offer: 50% off your first month for the first 20 sellers</p>';
+  h += '<div class="card"><h3 style="font:400 18px var(--serif);margin-bottom:10px">How to upgrade</h3><p class="pill accent" style="margin:0 0 12px">Launch: 50% off your first month</p>';
   if (CFG.accountNumber) {
-    h += "<p style=\"font-size:15px;color:var(--muted);margin:0 0 12px\">Send the plan price to BIOSHOP's account, then message us on WhatsApp so we can switch your plan on.</p><div class=\"bankbox\">" +
+    h += "<p style=\"font-size:13px;color:var(--muted);margin:0 0 10px\">Send the plan price to BIOSHOP's account, then message us on WhatsApp.</p><div class=\"bankbox\">" +
       row("Bank", CFG.bankName) + row("Account name", CFG.accountName) + row("Account number", CFG.accountNumber) + "</div>";
-  } else {
-    h += "<p style=\"color:var(--muted)\">Message BIOSHOP on WhatsApp to upgrade your plan.</p>";
-  }
+  } else h += "<p style=\"color:var(--muted);font-size:13px\">Message BIOSHOP on WhatsApp to upgrade.</p>";
   if (CFG.whatsapp) {
     ["starter", "pro"].forEach(function (k) {
       var text = "Hi BIOSHOP, I'd like the " + plans[k].name + " plan. My account email is " + u.email + ".";
-      h += '<a class="btn wa" style="margin:6px 8px 0 0;padding:13px 22px;font-size:14px" target="_blank" rel="noopener" href="https://wa.me/' + esc(CFG.whatsapp) + "?text=" + encodeURIComponent(text) + '">Message us about ' + plans[k].name + "</a>";
+      h += '<a class="btn wa" style="margin:6px 8px 0 0;padding:12px 18px;font-size:10.5px" target="_blank" rel="noopener" href="https://wa.me/' + esc(CFG.whatsapp) + "?text=" + encodeURIComponent(text) + '">Message us about ' + plans[k].name + "</a>";
     });
   }
   return h + "</div>";
 }
 function row(k, v) { return v ? "<div><span>" + esc(k) + "</span><b>" + esc(v) + "</b></div>" : ""; }
 
-/* actions */
+/* Actions */
 document.addEventListener("click", async function (e) {
   var b = e.target.closest("[data-act]");
   if (!b) return;
   var act = b.getAttribute("data-act");
   if (act === "tab") { S.tab = b.getAttribute("data-tab"); render(); }
   else if (act === "go") { var g = b.getAttribute("data-go"); if (g === "add") { S.tab = "products"; render(); openProduct(null); } else { S.tab = g; render(); window.scrollTo({ top: 0, behavior: "smooth" }); } }
-  else if (act === "copylink") { copy(storeUrl()); }
+  else if (act === "copylink") copy(storeUrl());
   else if (act === "add") openProduct(null);
   else if (act === "edit") openProduct(b.getAttribute("data-id"));
   else if (act === "del") {
@@ -206,9 +207,28 @@ document.addEventListener("submit", async function (e) {
   } catch (x) { err.textContent = x.message; }
 });
 
+/* Branding uploads */
+document.addEventListener("change", async function (e) {
+  if (e.target.id !== "avatarInput" && e.target.id !== "coverInput") return;
+  var file = e.target.files[0];
+  if (!file) return;
+  var kind = e.target.id === "avatarInput" ? "avatar" : "cover";
+  try {
+    var r = await fetch("/api/store/branding?kind=" + kind, {
+      method: "POST",
+      headers: { "content-type": "image/jpeg" },
+      body: file
+    });
+    var d = await r.json();
+    if (!r.ok) throw new Error(d.error || "Upload failed");
+    await load(); toast(kind === "avatar" ? "Photo updated" : "Cover updated");
+  } catch (x) { toast(x.message); }
+  e.target.value = "";
+});
+
 $("logout").addEventListener("click", async function () { try { await api("POST", "/api/logout", {}); } catch (e) {} location.href = "/"; });
 
-/* product dialog */
+/* Product dialog */
 function slots() { return S.me.limits.images - P.existing.length - P.files.length; }
 
 function openProduct(id) {
@@ -258,7 +278,7 @@ $("pdlg").addEventListener("close", function () { P.files.forEach(function (f) {
 
 async function compress(file) {
   var bmp;
-  try { bmp = await createImageBitmap(file); } catch (e) { throw new Error("Couldn't read one of the photos. Try a different one."); }
+  try { bmp = await createImageBitmap(file); } catch (e) { throw new Error("Couldn't read one of the photos."); }
   var scale = Math.min(1, 1000 / Math.max(bmp.width, bmp.height));
   var c = document.createElement("canvas");
   c.width = Math.round(bmp.width * scale); c.height = Math.round(bmp.height * scale);
@@ -274,7 +294,7 @@ $("pform").addEventListener("submit", async function (e) {
   err.textContent = "";
   var name = $("pname").value.trim(), price = Number($("pprice").value);
   if (name.length < 2) { err.textContent = "Enter the product name."; return; }
-  if (!price || price < 1) { err.textContent = "Enter a price in naira, like 15000."; return; }
+  if (!price || price < 1) { err.textContent = "Enter a price in naira."; return; }
   btn.disabled = true; btn.textContent = "Saving…";
   try {
     var body = { name: name, price: price, description: $("pdesc").value, inStock: $("pstock").checked };
@@ -291,7 +311,7 @@ $("pform").addEventListener("submit", async function (e) {
     $("pdlg").close();
     toast(failed ? "Saved, but some photos didn't upload" : "Product saved");
   } catch (x) { err.textContent = x.message; }
-  btn.disabled = false; btn.textContent = "Save product";
+  btn.disabled = false; btn.textContent = "Save";
 });
 
 load().catch(function (x) { $("app").innerHTML = '<p class="err">' + esc(x.message) + "</p>"; });
