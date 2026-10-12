@@ -38,6 +38,8 @@ export async function onRequestGet({ request, env }) {
       bankName: store.bank_name,
       accountName: store.account_name,
       accountNumber: store.account_number,
+      avatarUrl: store.avatar_url,
+      coverUrl: store.cover_url,
     },
     limits: { products: limits.products, images: limits.images, planName: limits.name },
     plans: PLANS,
