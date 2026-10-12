@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BIOSHOP: a proper shop for your Instagram bio</title>
+<meta name="description" content="Put your products in one link. Customers order on WhatsApp or pay by bank transfer. Set up in under 2 minutes.">
+<meta property="og:title" content="BIOSHOP: a proper shop for your Instagram bio">
+<meta property="og:description" content="Put your products in one link. Customers order on WhatsApp or pay by bank transfer.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF9F5; --soft:#F3EFE8; --ink:#1A1A1A; --muted:#6B665F; --line:#E6E0D6;
+  --accent:#C66B4F; --cta:#1A1A1A; --cta-ink:#FBF9F5;
+  --serif:"Young Serif", Georgia, "Times New Roman", serif;
+  --sans:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg:#161412;--soft:#1F1C19;--ink:#F3EEE6;--muted:#A39C91;--line:#302B26;--accent:#E08A6E;--cta:#F3EEE6;--cta-ink:#1A1A1A}
+}
+:root[data-theme="dark"]{--bg:#161412;--soft:#1F1C19;--ink:#F3EEE6;--muted:#A39C91;--line:#302B26;--accent:#E08A6E;--cta:#F3EEE6;--cta-ink:#1A1A1A}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 80px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 18px/1.7 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{font-family:var(--serif);font-weight:400;margin:0;letter-spacing:-.01em;line-height:1.12}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:4px;border-radius:6px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+.narrow{max-width:620px}
+
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:96px}
+.logo{font-family:var(--serif);font-size:24px;text-decoration:none}
+.links{display:flex;gap:36px;align-items:center;font-size:16px}
+.links a{text-decoration:none;color:var(--muted)}
+.links a:hover{color:var(--ink)}
+.btn{display:inline-block;font:600 17px/1 var(--sans);background:var(--cta);color:var(--cta-ink);padding:18px 30px;border-radius:999px;text-decoration:none;transition:transform .15s, opacity .15s;border:0;cursor:pointer}
+.btn:hover{opacity:.9;transform:translateY(-1px)}
+.btn.small{padding:12px 22px;font-size:15px}
+.links a.btn{color:var(--cta-ink)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.textlink{font-weight:600;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:6px;text-decoration-thickness:3px}
+
+/* hero */
+.hero{padding:40px 0 140px}
+.hero .wrap{display:grid;grid-template-columns:.95fr 1.05fr;gap:30px;align-items:center}
+.hero h1{font-size:clamp(44px,5.6vw,74px)}
+.hero p.lead{margin-top:32px;font-size:21px;color:var(--muted);max-width:25em}
+.hero .row{margin-top:48px;display:flex;gap:28px;align-items:center;flex-wrap:wrap}
+.hero .note{margin-top:22px;font-size:15px;color:var(--muted)}
+.scene{position:relative;height:720px;width:100%;display:grid;place-items:center}
+.scene canvas{position:absolute;inset:0;width:100%;height:100%;display:none;touch-action:pan-y}
+.scene.gl-on canvas{display:block}
+.scene.gl-on .flat{display:none}
+
+/* light fallback phone (used on slower phones or if WebGL is missing) */
+.flat{width:282px;height:566px;border-radius:44px;border:10px solid #1A1A1A;background:#fff;color:#1A1A1A;padding:30px 14px 14px;display:flex;flex-direction:column;transform:rotate(-4deg);box-shadow:-24px 34px 60px -24px rgba(26,26,26,.35);position:relative}
+.flat .bar{background:#F1EEE8;border-radius:12px;font-size:11px;color:#6B665F;padding:8px 12px;margin-top:6px}
+.flat .bar b{color:#1A1A1A}
+.flat .who{display:flex;gap:11px;align-items:center;margin:14px 2px 10px}
+.flat .pic{width:42px;height:42px;border-radius:50%;background:#EBD9CA;display:grid;place-items:center;font:400 18px var(--serif);color:#8a4a36}
+.flat .who b{display:block;font:400 17px/1.1 var(--serif)}
+.flat .who span{font-size:12px;color:#6B665F}
+.flat .g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.flat .t{aspect-ratio:1;border-radius:12px;display:grid;place-items:center;font:400 14px/1.2 var(--serif);text-align:center;padding:6px}
+.flat .n{font-size:12px;font-weight:600;margin-top:5px;line-height:1.2}
+.flat .p{font-size:12px;font-weight:700;color:#A9533A}
+.flat .wa{margin-top:auto;background:#25D366;color:#073b1b;text-align:center;font-weight:700;font-size:14px;padding:13px;border-radius:999px}
+
+section{padding:150px 0}
+.soft{background:var(--soft)}
+h2{font-size:clamp(34px,4.4vw,56px)}
+.sec-p{margin-top:28px;font-size:20px;color:var(--muted)}
+
+.story p{font-size:22px;line-height:1.65;margin-top:26px}
+.story p:first-of-type{margin-top:0}
+
+.steps{margin-top:90px}
+.step{display:grid;grid-template-columns:120px 1fr;gap:20px;padding:44px 0;border-top:1px solid var(--line)}
+.step:last-child{border-bottom:1px solid var(--line)}
+.step .n{font:400 56px/1 var(--serif);color:var(--accent)}
+.step h3{font-size:30px;margin-bottom:10px}
+.step p{color:var(--muted);max-width:32em}
+.step code{font:500 15px ui-monospace,Menlo,monospace;background:var(--soft);padding:3px 9px;border-radius:6px;color:var(--ink);word-break:break-all}
+
+/* who it's for */
+.who{margin-top:80px}
+.who .r{display:grid;grid-template-columns:240px 1fr;gap:30px;padding:36px 0;border-top:1px solid var(--line)}
+.who .r:last-child{border-bottom:1px solid var(--line)}
+.who h3{font-size:28px}
+.who p{color:var(--muted);max-width:34em}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:90px;align-items:center}
+.pay{margin-top:56px;display:grid;gap:40px}
+.pay h3{font-size:26px;margin-bottom:8px}
+.pay p{color:var(--muted)}
+
+.cwrap{perspective:1500px;display:grid;place-items:center;min-height:560px;position:relative}
+.stack{position:relative;width:min(330px,100%);transform-style:preserve-3d;transform:rotateY(-22deg) rotateX(8deg);transition:transform .25s ease-out}
+.layer{background:#fff;color:#1A1A1A;border-radius:24px;border:1px solid var(--line)}
+.base{padding:20px;box-shadow:30px 40px 70px -30px rgba(26,26,26,.35)}
+.photo{aspect-ratio:1.15;border-radius:14px;background:#EFEAE2;display:grid;place-items:center;color:#8b857b;font-size:14px;text-align:center;padding:10px}
+.base h3{font-size:24px;margin:18px 2px 2px}
+.base .pr{font-weight:700;color:#A9533A;margin:0 2px 16px}
+.base .spacer{height:176px}
+.floatbank{position:absolute;left:-40px;right:-40px;bottom:96px;padding:14px 16px;font-size:14px;line-height:1.8;transform:translateZ(60px);box-shadow:20px 30px 50px -20px rgba(26,26,26,.4)}
+.floatbank div{display:flex;justify-content:space-between;gap:10px}
+.floatbank span{color:#6B665F}
+.floatwa{position:absolute;left:10px;right:-60px;bottom:18px;background:#25D366;color:#073b1b;text-align:center;font-weight:700;padding:16px;border-radius:999px;transform:translateZ(110px);box-shadow:20px 34px 40px -16px rgba(37,211,102,.55)}
+.floatmsg{position:absolute;right:-90px;top:30px;max-width:210px;background:#DCF8C6;color:#142b14;border-radius:18px 18px 4px 18px;padding:12px 14px;font-size:14px;line-height:1.5;transform:translateZ(150px);box-shadow:20px 30px 40px -18px rgba(26,26,26,.35)}
+
+.not{margin-top:70px;display:grid;grid-template-columns:repeat(2,1fr);gap:0 80px}
+.not div{padding:22px 0;border-top:1px solid var(--line);font-size:20px;display:flex;justify-content:space-between;gap:14px}
+.not s{text-decoration-thickness:2px;text-decoration-color:var(--accent)}
+.not span{color:var(--muted);font-size:16px;align-self:center}
+
+.offer{display:inline-block;margin-top:32px;padding:11px 20px;border-radius:999px;border:1.5px solid var(--accent);font-weight:600;font-size:16px;color:var(--ink)}
+.plan .price s{color:var(--muted);text-decoration-color:var(--accent);text-decoration-thickness:2px;margin-right:6px}
+.plans{margin-top:56px}
+.plan{display:grid;grid-template-columns:1fr 1.4fr auto;gap:30px;align-items:center;padding:46px 0;border-top:1px solid var(--line)}
+.plan:last-child{border-bottom:1px solid var(--line)}
+.plan h3{font-size:32px}
+.plan .price{font:400 20px var(--serif);margin-top:4px}
+.plan .price small{font:400 15px var(--sans);color:var(--muted)}
+.plan ul{margin:0;padding:0;list-style:none;color:var(--muted)}
+.plan li{padding:2px 0}
+.badge{font:600 13px var(--sans);margin-left:10px;vertical-align:middle;padding:5px 11px;border-radius:999px;background:var(--accent);color:#fff}
+
+.faq{margin-top:70px;max-width:760px}
+details{border-top:1px solid var(--line);padding:6px 0}
+details:last-child{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;list-style:none;font:400 22px var(--serif);padding:22px 0;display:flex;justify-content:space-between;gap:20px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:300 30px/1 var(--sans);color:var(--accent)}
+details[open] summary::after{content:"–"}
+details p{color:var(--muted);padding:0 0 26px;max-width:36em}
+.ask{margin-top:40px;color:var(--muted)}
+.ask a{font-weight:600;color:var(--ink);text-decoration-color:var(--accent);text-decoration-thickness:2px;text-underline-offset:5px}
+[hidden]{display:none!important}
+
+.final{text-align:center;padding:170px 0 150px}
+.final h2{font-size:clamp(38px,5.6vw,72px);max-width:12em;margin:0 auto}
+.final p{margin:28px auto 52px;color:var(--muted);font-size:20px;max-width:26em}
+footer{padding:40px 0 60px;color:var(--muted);font-size:15px}
+footer .wrap{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+
+/* sticky CTA on phones */
+.sticky{display:none}
+@media (max-width:900px){
+  nav .wrap{height:76px}
+  .links a:not(.btn):not([href="/login"]){display:none}
+  .hero{padding:10px 0 100px}
+  .hero .wrap,.two{grid-template-columns:1fr;gap:50px}
+  .scene{height:560px}
+  section{padding:110px 0}
+  .step{grid-template-columns:70px 1fr}
+  .step .n{font-size:44px}
+  .who .r{grid-template-columns:1fr;gap:8px}
+  .not{grid-template-columns:1fr}
+  .plan{grid-template-columns:1fr;gap:18px}
+  .plan .btn{justify-self:start}
+  .final{padding:120px 0 110px}
+  .floatbank{left:-10px;right:-10px}
+  .floatwa{right:-10px}
+  .floatmsg{right:-14px}
+  .stack{transform:rotateY(-14deg) rotateX(6deg)}
+  .cwrap{padding:0 18px}
+  footer{padding-bottom:110px}
+  .sticky{display:block;position:fixed;left:0;right:0;bottom:0;z-index:40;padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .3s ease}
+  .sticky.show{transform:translateY(0)}
+  .sticky .btn{display:block;text-align:center;width:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#top">BIOSHOP</a>
+    <div class="links">
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">Questions</a>
+      <a href="/login">Log in</a>
+      <a class="btn small" data-cta href="#">Start free</a>
+    </div>
+  </div>
+</nav>
+
+<main id="top">
+
+<header class="hero" id="hero">
+  <div class="wrap">
+    <div>
+      <h1>Stop sending screenshots of your price list.</h1>
+      <p class="lead">Put your products in one link. Paste it in your Instagram or TikTok bio. Customers see everything you sell, then order on WhatsApp or pay by bank transfer.</p>
+      <div class="row">
+        <a class="btn" data-cta href="#">Open your free store</a>
+        <a class="textlink" id="secondary" href="#how">See how it works</a>
+      </div>
+      <p class="note">Takes under 2 minutes. You only need an email and a password.<br>Launch offer: 50% off your first month for the first 20 sellers.</p>
+    </div>
+
+    <div class="scene" id="scene" role="img" aria-label="A phone showing a BIOSHOP store with products, prices and an Order on WhatsApp button">
+      <canvas id="gl"></canvas>
+      <div class="flat">
+        <div class="bar">bioshop.pages.dev/store/<b>adaeze</b></div>
+        <div class="who"><div class="pic">A</div><div><b>Adaeze's Closet</b><span>Bags, shoes and skincare</span></div></div>
+        <div class="g">
+          <div><div class="t" style="background:#F0E3D6;color:#7a4a2a">Ankara<br>tote bag</div><div class="n">Ankara tote bag</div><div class="p">₦18,500</div></div>
+          <div><div class="t" style="background:#E9E2D6;color:#5a4a33">White<br>sneakers</div><div class="n">White sneakers</div><div class="p">₦32,000</div></div>
+          <div><div class="t" style="background:#F3DCD2;color:#8a3f2a">Shea body<br>butter</div><div class="n">Shea body butter</div><div class="p">₦6,500</div></div>
+          <div><div class="t" style="background:#E6E8D8;color:#4a5a33">Straw<br>sun hat</div><div class="n">Straw sun hat</div><div class="p">₦9,800</div></div>
+        </div>
+        <div class="wa">Order on WhatsApp</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="soft story">
+  <div class="wrap narrow">
+    <p>You already sell on Instagram. People ask "how much?", you reply, they ask for the other colour, you send another photo.</p>
+    <p>It works, until it's 40 messages a day and you can't remember who asked about what.</p>
+    <p>BIOSHOP gives your bio link a real catalog. Photo, name, price. Customers look first, then message you only when they're ready to buy.</p>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="narrow"><h2>Set it up in the time it takes to make tea.</h2></div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div><h3>Sign up</h3><p>Just your email and a password. No forms, no waiting for approval.</p></div></div>
+      <div class="step"><div class="n">2</div><div><h3>Add what you sell</h3><p>Upload a photo, type the name and price. Do that for each product.</p></div></div>
+      <div class="step"><div class="n">3</div><div><h3>Paste your link in your bio</h3><p>You get a link like <code>BIOSHOP.pages.dev/store/yourname</code>. Put it in Instagram or TikTok and you're open.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="soft">
+  <div class="wrap">
+    <div class="narrow"><h2>Made for how you already sell.</h2></div>
+    <div class="who">
+      <div class="r"><h3>Hair sellers</h3><p>Wigs, bundles, frontals. List each one with its price, so customers stop asking "how much for the 24 inch?"</p></div>
+      <div class="r"><h3>Fashion and bags</h3><p>Dresses, shoes, bags. On Starter you can add 3 photos per product, so people see the front, the back and the detail.</p></div>
+      <div class="r"><h3>Skincare and beauty</h3><p>Every product and price in one place. Customers pick what they want and message you to order.</p></div>
+      <div class="r"><h3>Food and small chops</h3><p>Put your menu and prices up once. Orders come straight to your WhatsApp.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap two">
+    <div>
+      <h2>Your customers buy the way they already do.</h2>
+      <div class="pay">
+        <div><h3>On WhatsApp</h3><p>They tap a product and a chat opens with you. The product name and price are already typed in, so you don't have to ask what they want.</p></div>
+        <div><h3>By bank transfer</h3><p>Your account details show on the product. They pay you directly, and the money goes into your account.</p></div>
+      </div>
+    </div>
+    <div class="cwrap" id="cwrap" aria-hidden="true">
+      <div class="stack" id="stack">
+        <div class="layer base">
+          <div class="photo">Your product photo goes here</div>
+          <h3>Ankara tote bag</h3>
+          <div class="pr">₦18,500</div>
+          <div class="spacer"></div>
+        </div>
+        <div class="layer floatbank">
+          <div><span>Bank</span><b>Your bank</b></div>
+          <div><span>Name</span><b>Adaeze Okafor</b></div>
+          <div><span>Account</span><b>0123456789</b></div>
+        </div>
+        <div class="floatwa">Order on WhatsApp</div>
+        <div class="floatmsg">Hi! I'd like to order the Ankara tote bag (₦18,500)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="soft">
+  <div class="wrap">
+    <div class="narrow">
+      <h2>No cart. No checkout. No payment gateway.</h2>
+      <p class="sec-p">Just a clean product grid, a WhatsApp button, and your bank details. Nothing to learn before your first sale.</p>
+    </div>
+    <div class="not">
+      <div><s>A shopping cart</s><span>Not needed</span></div>
+      <div><s>A checkout page</s><span>Not needed</span></div>
+      <div><s>A payment gateway</s><span>Not needed</span></div>
+      <div><s>A developer</s><span>Not needed</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="narrow">
+      <h2>Start free. Pay only when you outgrow it.</h2>
+      <p class="sec-p">Prices are monthly, in naira.</p>
+      <p class="offer">Launch offer: 50% off your first month. First 20 sellers only.</p>
+    </div>
+    <div class="plans">
+      <div class="plan">
+        <div><h3>Free</h3><div class="price">₦0</div></div>
+        <ul><li>5 products</li><li>1 image per product</li></ul>
+        <a class="btn ghost" data-cta href="#">Start free</a>
+      </div>
+      <div class="plan">
+        <div><h3>Starter<span class="badge">Most sellers pick this</span></h3><div class="price"><s>₦5,000</s> ₦2,500 <small>for your first month, then ₦5,000 a month</small></div></div>
+        <ul><li>30 products</li><li>3 images per product</li></ul>
+        <a class="btn" data-cta href="#">Get Starter</a>
+      </div>
+      <div class="plan">
+        <div><h3>Pro</h3><div class="price"><s>₦10,000</s> ₦5,000 <small>for your first month, then ₦10,000 a month</small></div></div>
+        <ul><li>Unlimited products</li><li>5 images per product</li></ul>
+        <a class="btn ghost" data-cta href="#">Get Pro</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="soft" id="faq">
+  <div class="wrap">
+    <h2>Questions people ask</h2>
+    <div class="faq">
+      <details><summary>Do my customers have to sign up?</summary><p>No. They open your link, look through your products, and message you or pay by transfer.</p></details>
+      <details><summary>Do I need a website?</summary><p>No. Your BIOSHOP link is your store. You paste it in your bio and share it anywhere.</p></details>
+      <details><summary>How do I get paid?</summary><p>Customers send money straight to the bank account you add to your store. BIOSHOP doesn't hold your money.</p></details>
+      <details><summary>Why is there no cart?</summary><p>Because your customers already order on WhatsApp. We kept that, and removed everything that gets in the way.</p></details>
+      <details><summary>How does the launch offer work?</summary><p>The first 20 sellers to upgrade get 50% off their first month. Starter is ₦2,500 and Pro is ₦5,000 for that month. After that, the normal price applies.</p></details>
+      <details><summary>Can I try it without paying?</summary><p>Yes. The free plan lets you add 5 products with 1 image each. Upgrade when your shelf gets bigger.</p></details>
+      <details><summary>What will my link look like?</summary><p>Something like BIOSHOP.pages.dev/store/yourname, using the name you choose.</p></details>
+    </div>
+    <p class="ask" id="ask" hidden>Still have a question? <a id="wa-link" href="#">Chat with us on WhatsApp</a></p>
+  </div>
+</section>
+
+<section class="final" id="final">
+  <div class="wrap">
+    <h2>Give your bio link something to sell.</h2>
+    <p>Open your store today and have it live before you finish your next cup of tea.</p>
+    <a class="btn" data-cta href="#">Open your free store</a>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>BIOSHOP, made for Nigerian sellers.</span>
+    <span>© 2026</span>
+  </div>
+</footer>
+
+<div class="sticky" id="sticky"><a class="btn" data-cta href="#">Open your free store</a></div>
+
+<script>
+/* ---- Settings: edit these three lines ---- */
+var SIGNUP_URL = "/signup";   // sign-up page of this app
+var DEMO_URL = "";                              // a real store to show, e.g. "https://BIOSHOP.pages.dev/store/demo". Leave empty to hide.
+var WHATSAPP_NUMBER = "";                       // digits only with country code, e.g. "2348012345678". Leave empty to hide.
+
+document.querySelectorAll("[data-cta]").forEach(function(a){ a.setAttribute("href", SIGNUP_URL); });
+if (DEMO_URL) { var s = document.getElementById("secondary"); s.textContent = "See a real store"; s.setAttribute("href", DEMO_URL); }
+if (WHATSAPP_NUMBER) {
+  document.getElementById("wa-link").setAttribute("href", "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent("Hi BIOSHOP, I have a question."));
+  document.getElementById("ask").hidden = false;
+}
+
+var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var fine = window.matchMedia("(pointer: fine)").matches;
+
+/* ---- Sticky button on phones: shows after the hero, hides near the final CTA ---- */
+(function(){
+  var bar = document.getElementById("sticky"), hero = document.getElementById("hero"), fin = document.getElementById("final");
+  if (!("IntersectionObserver" in window)) return;
+  var pastHero = false, atEnd = false;
+  function update(){ bar.classList.toggle("show", pastHero && !atEnd); }
+  new IntersectionObserver(function(e){ pastHero = !e[0].isIntersecting && e[0].boundingClientRect.top < 0; update(); }).observe(hero);
+  new IntersectionObserver(function(e){ atEnd = e[0].isIntersecting; update(); }).observe(fin);
+})();
+
+/* ---- Layered product card tilt ---- */
+(function(){
+  if (reduce || !fine) return;
+  var w = document.getElementById("cwrap"), s = document.getElementById("stack");
+  w.addEventListener("pointermove", function(e){
+    var r = w.getBoundingClientRect();
+    var x = (e.clientX - r.left)/r.width - .5, y = (e.clientY - r.top)/r.height - .5;
+    s.style.transform = "rotateY(" + (-22 + x*30) + "deg) rotateX(" + (8 - y*20) + "deg)";
+  });
+  w.addEventListener("pointerleave", function(){ s.style.transform = ""; });
+})();
+
+/* ---- 3D hero: only loads on devices that can handle it ---- */
+(function(){
+  var nav = navigator, conn = nav.connection || {};
+  var slowNet = conn.saveData || /(^|-)2g$/.test(conn.effectiveType || "");
+  var weak = (nav.deviceMemory !== undefined && nav.deviceMemory < 4) || (nav.hardwareConcurrency !== undefined && nav.hardwareConcurrency < 4);
+  if (slowNet || weak) return;               // keep the light phone on slower devices
+  try { var t = document.createElement("canvas"); if (!(t.getContext("webgl") || t.getContext("experimental-webgl"))) return; } catch(e){ return; }
+
+  var tag = document.createElement("script");
+  tag.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js";
+  tag.onload = function(){ try { initScene(); } catch(e){ /* fallback phone stays */ } };
+  document.head.appendChild(tag);
+
+  function initScene(){
+    var canvas = document.getElementById("gl"), holder = document.getElementById("scene");
+    var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    holder.classList.add("gl-on");
+
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(32, 1, .1, 50);
+    camera.position.set(0, 0, 11);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xd9d2c6, .95));
+    var key = new THREE.DirectionalLight(0xffffff, 1.0); key.position.set(4,6,7); scene.add(key);
+    var fill = new THREE.DirectionalLight(0xfff1e0, .35); fill.position.set(-5,1,4); scene.add(fill);
+    var rim = new THREE.DirectionalLight(0xffffff, .4); rim.position.set(-3,4,-6); scene.add(rim);
+
+    function rr(w,h,r){
+      var s = new THREE.Shape(), x=-w/2, y=-h/2;
+      s.moveTo(x+r,y); s.lineTo(x+w-r,y); s.quadraticCurveTo(x+w,y,x+w,y+r);
+      s.lineTo(x+w,y+h-r); s.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+      s.lineTo(x+r,y+h); s.quadraticCurveTo(x,y+h,x,y+h-r);
+      s.lineTo(x,y+r); s.quadraticCurveTo(x,y,x+r,y); return s;
+    }
+    function slab(w,h,r,depth,bev){
+      var g = new THREE.ExtrudeGeometry(rr(w,h,r), {depth:depth, bevelEnabled:true, bevelThickness:bev, bevelSize:bev, bevelSegments:6, curveSegments:28});
+      g.center(); return g;
+    }
+    function mat(c, rough, metal){ return new THREE.MeshStandardMaterial({color:c, roughness:rough==null?.55:rough, metalness:metal||0}); }
+
+    var world = new THREE.Group(); scene.add(world);
+
+    var phone = new THREE.Group();
+    phone.add(new THREE.Mesh(slab(1.6,3.3,.28,.1,.04), mat(0x1a1a1a,.32,.35)));
+    var screenTex = new THREE.CanvasTexture(document.createElement("canvas"));
+    screenTex.encoding = THREE.sRGBEncoding; screenTex.anisotropy = 8;
+    var screen = new THREE.Mesh(new THREE.PlaneGeometry(1.44,3.14), new THREE.MeshBasicMaterial({map:screenTex, transparent:true, toneMapped:false}));
+    screen.position.z = .092; phone.add(screen);
+    world.add(phone);
+
+    function drawScreen(){
+      var W=640, H=1396, c = screenTex.image; c.width=W; c.height=H;
+      var x = c.getContext("2d");
+      function pill(px,py,w,h,r,fill){ x.beginPath(); x.moveTo(px+r,py); x.arcTo(px+w,py,px+w,py+h,r); x.arcTo(px+w,py+h,px,py+h,r); x.arcTo(px,py+h,px,py,r); x.arcTo(px,py,px+w,py,r); x.closePath(); x.fillStyle=fill; x.fill(); }
+      var serif = "'Young Serif', Georgia, serif", sans = "'Figtree', system-ui, sans-serif";
+      x.clearRect(0,0,W,H);
+      pill(0,0,W,H,66,"#ffffff");
+      pill(40,92,W-80,64,22,"#F1EEE8");
+      x.fillStyle="#6B665F"; x.font="500 26px "+sans; x.textAlign="left"; x.textBaseline="middle";
+      x.fillText("bioshop.pages.dev/store/adaeze", 66, 126);
+      x.beginPath(); x.arc(86,236,40,0,7); x.fillStyle="#EBD9CA"; x.fill();
+      x.fillStyle="#8a4a36"; x.font="400 38px "+serif; x.textAlign="center"; x.fillText("A",86,238);
+      x.textAlign="left"; x.fillStyle="#1A1A1A"; x.font="400 38px "+serif; x.fillText("Adaeze's Closet",148,222);
+      x.fillStyle="#6B665F"; x.font="400 25px "+sans; x.fillText("Bags, shoes and skincare",148,264);
+      var items=[["Ankara\ntote bag","₦18,500","#F0E3D6","#7a4a2a"],["White\nsneakers","₦32,000","#E9E2D6","#5a4a33"],["Shea body\nbutter","₦6,500","#F3DCD2","#8a3f2a"],["Straw\nsun hat","₦9,800","#E6E8D8","#4a5a33"]];
+      for (var i=0;i<4;i++){
+        var cx = 40 + (i%2)*290, cy = 330 + Math.floor(i/2)*400, it = items[i];
+        pill(cx,cy,270,290,28,it[2]);
+        x.fillStyle=it[3]; x.font="400 36px "+serif; x.textAlign="center";
+        var ls = it[0].split("\n"); x.fillText(ls[0],cx+135,cy+120); x.fillText(ls[1],cx+135,cy+168);
+        x.textAlign="left"; x.fillStyle="#1A1A1A"; x.font="600 28px "+sans; x.fillText(it[0].replace("\n"," "),cx+4,cy+332);
+        x.fillStyle="#A9533A"; x.font="700 28px "+sans; x.fillText(it[1],cx+4,cy+368);
+      }
+      pill(40,1236,W-80,104,52,"#25D366");
+      x.fillStyle="#073b1b"; x.textAlign="center"; x.font="700 32px "+sans; x.fillText("Order on WhatsApp",W/2,1289);
+      screenTex.needsUpdate = true;
+    }
+    drawScreen();
+    if (document.fonts && document.fonts.load){
+      Promise.all([document.fonts.load("38px 'Young Serif'"), document.fonts.load("600 28px 'Figtree'")]).then(drawScreen).catch(function(){});
+    }
+
+    var props = [];
+    function add(obj, x,y,z, ph, kind){ obj.position.set(x,y,z); obj.userData={bx:x,by:y,bz:z,ph:ph,kind:kind}; world.add(obj); props.push(obj); return obj; }
+
+    var bag = new THREE.Group();
+    bag.add(new THREE.Mesh(slab(.95,1.0,.12,.42,.05), mat(0xe6c79c,.8)));
+    var handle = new THREE.Mesh(new THREE.TorusGeometry(.3,.045,16,40,Math.PI), mat(0xb98f5c,.7)); handle.position.y=.5; bag.add(handle);
+    var stripe = new THREE.Mesh(new THREE.BoxGeometry(.97,.12,.5), mat(0xc66b4f,.7)); stripe.position.y=-.1; bag.add(stripe);
+    add(bag, -2.3, .9, .9, 0, "spin");
+
+    var bottle = new THREE.Group();
+    bottle.add(new THREE.Mesh(new THREE.CylinderGeometry(.34,.34,1.0,48), mat(0xd9a08a,.35)));
+    var bn = new THREE.Mesh(new THREE.CylinderGeometry(.16,.2,.2,32), mat(0xd9a08a,.35)); bn.position.y=.6; bottle.add(bn);
+    var bc = new THREE.Mesh(new THREE.CylinderGeometry(.19,.19,.2,32), mat(0x1a1a1a,.4)); bc.position.y=.78; bottle.add(bc);
+    var bl = new THREE.Mesh(new THREE.CylinderGeometry(.345,.345,.46,48,1,true), mat(0xfbf9f5,.6)); bl.position.y=-.05; bottle.add(bl);
+    add(bottle, -2.0, -1.3, .6, 2, "spin");
+
+    var bubble = new THREE.Group();
+    bubble.add(new THREE.Mesh(slab(1.5,.95,.34,.22,.06), mat(0x25d366,.4)));
+    var tail = new THREE.Mesh(new THREE.ConeGeometry(.17,.34,4), mat(0x25d366,.4)); tail.rotation.z = Math.PI*.75; tail.position.set(.55,-.55,0); bubble.add(tail);
+    for (var d=-1; d<=1; d++){ var dot = new THREE.Mesh(new THREE.SphereGeometry(.07,24,16), mat(0xffffff,.3)); dot.position.set(d*.28,0,.2); bubble.add(dot); }
+    add(bubble, 2.2, 1.25, 1.0, 1, "sway");
+
+    var card = new THREE.Group();
+    card.add(new THREE.Mesh(slab(1.55,.98,.12,.03,.015), mat(0xc66b4f,.35,.15)));
+    var chip = new THREE.Mesh(new THREE.BoxGeometry(.28,.2,.01), mat(0xe8c65a,.3,.6)); chip.position.set(-.45,.12,.03); card.add(chip);
+    var line = new THREE.Mesh(new THREE.BoxGeometry(.9,.06,.01), mat(0xfbf9f5,.5)); line.position.set(.1,-.28,.03); card.add(line);
+    add(card, 2.1, -1.2, .9, 3, "sway");
+    card.rotation.z = .18;
+
+    var sc = document.createElement("canvas"); sc.width=sc.height=256; var sx = sc.getContext("2d");
+    var gr = sx.createRadialGradient(128,128,0,128,128,128); gr.addColorStop(0,"rgba(26,26,26,.22)"); gr.addColorStop(1,"rgba(26,26,26,0)");
+    sx.fillStyle=gr; sx.fillRect(0,0,256,256);
+    var sh = new THREE.Mesh(new THREE.PlaneGeometry(4.6,4.6), new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(sc), transparent:true, depthWrite:false}));
+    sh.rotation.x = -Math.PI/2; sh.position.y = -2.35; scene.add(sh);
+
+    var spread = 1;
+    function resize(){
+      var w = holder.clientWidth, h = holder.clientHeight;
+      if (!w || !h) return;
+      renderer.setSize(w,h,false);
+      camera.aspect = w/h; camera.updateProjectionMatrix();
+      var narrow = w/h < .9;
+      world.scale.setScalar(narrow ? Math.max(.52, w/h*.82) : 1);
+      spread = narrow ? .62 : 1;
+    }
+    window.addEventListener("resize", resize); resize();
+
+    var mx=0,my=0,tx=0,ty=0;
+    if (fine && !reduce){
+      window.addEventListener("pointermove", function(e){
+        var r = holder.getBoundingClientRect();
+        tx = Math.max(-1,Math.min(1,((e.clientX - r.left)/r.width - .5)*2));
+        ty = Math.max(-1,Math.min(1,((e.clientY - r.top)/r.height - .5)*2));
+      });
+    }
+    var start = performance.now(), t0 = start, visible = true;
+    if ("IntersectionObserver" in window){ new IntersectionObserver(function(en){ visible = en[0].isIntersecting; }).observe(holder); }
+
+    function frame(now){
+      requestAnimationFrame(frame);
+      if (!visible && !reduce) return;
+      var t = (now - start)/1000, dt = Math.min(.05,(now - t0)/1000); t0 = now;
+      var intro = reduce ? 1 : Math.min(1, t/1.5), e = 1 - Math.pow(1-intro,3);
+      mx += (tx - mx)*.06; my += (ty - my)*.06;
+      var scroll = Math.min(1, window.scrollY / 700);
+      world.rotation.y = (-.45 + mx*.35 + scroll*.9) + (1-e)*-1.6;
+      world.rotation.x = .08 - my*.18 + scroll*.12;
+      world.position.y = (1-e)*-1.2 + scroll*.3;
+      phone.position.y = reduce ? 0 : Math.sin(t*.8)*.06;
+      props.forEach(function(p){
+        var u = p.userData;
+        p.position.x = u.bx*spread;
+        p.position.y = u.by + (reduce?0:Math.sin(t*.9+u.ph)*.12);
+        p.position.z = u.bz;
+        if (!reduce){
+          if (u.kind==="spin") p.rotation.y += dt*.5;
+          else { p.rotation.y = Math.sin(t*.6+u.ph)*.35; p.rotation.x = Math.sin(t*.5+u.ph)*.12; }
+        }
+      });
+      renderer.render(scene, camera);
+    }
+    requestAnimationFrame(frame);
+  }
+})();
+</script>
+</body>
+</html>

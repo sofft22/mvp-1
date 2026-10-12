@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Log in · BIOSHOP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<div class="auth">
+  <a class="logo" href="/">BIOSHOP</a>
+  <h1 style="margin-top:36px">Welcome back</h1>
+  <form id="f" novalidate>
+    <label class="field"><span>Email</span><input type="email" name="email" autocomplete="email" inputmode="email" required></label>
+    <label class="field"><span>Password</span><input type="password" name="password" autocomplete="current-password" required></label>
+    <div class="err" id="err" role="alert"></div>
+    <button class="btn" id="go" type="submit">Log in</button>
+  </form>
+  <p class="alt">New here? <a href="/signup">Open your free store</a></p>
+</div>
+<script>
+document.getElementById("f").addEventListener("submit", async function (e) {
+  e.preventDefault();
+  var f = e.target, err = document.getElementById("err"), btn = document.getElementById("go");
+  err.textContent = ""; btn.disabled = true; btn.textContent = "Logging in…";
+  try {
+    var r = await fetch("/api/login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email: f.email.value, password: f.password.value }) });
+    var d = await r.json().catch(function () { return {}; });
+    if (!r.ok) throw new Error(d.error || "Something went wrong. Try again.");
+    location.href = "/dashboard";
+  } catch (x) { err.textContent = x.message; btn.disabled = false; btn.textContent = "Log in"; }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "bioshop",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node tests/utils.test.mjs && node --no-warnings tests/e2e.test.mjs",
+    "check": "node scripts/check.mjs",
+    "db:local": "wrangler d1 migrations apply bioshop --local",
+    "db:remote": "wrangler d1 migrations apply bioshop --remote",
+    "dev": "wrangler pages dev",
+    "deploy": "wrangler pages deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3.80.0"
+  }
+}

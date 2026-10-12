@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Dashboard · BIOSHOP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/app.css">
+<script src="/config.js"></script>
+</head>
+<body>
+<header class="top"><div class="wrap row"><a class="logo" href="/">BIOSHOP</a><button class="link" id="logout" type="button">Log out</button></div></header>
+<main class="wrap main" id="app"><p class="muted">Loading your store…</p></main>
+
+<dialog id="pdlg">
+  <form class="dlg" id="pform" novalidate>
+    <h2 id="ptitle">Add a product</h2>
+    <label class="field"><span>Product name</span><input type="text" id="pname" maxlength="80" autocomplete="off"></label>
+    <label class="field"><span>Price (₦)</span><input type="number" id="pprice" inputmode="numeric" min="1" step="1" placeholder="15000"></label>
+    <label class="field"><span>Description <small style="display:inline;font-weight:400">(optional)</small></span><textarea id="pdesc" maxlength="500" placeholder="Size, colour, delivery details…"></textarea></label>
+    <label class="field hide" id="pstockrow"><span><input type="checkbox" id="pstock" checked> In stock</span></label>
+    <div class="field">
+      <span>Photos <small style="display:inline;font-weight:400" id="pphotohint"></small></span>
+      <div class="thumbs" id="pthumbs"></div>
+      <input type="file" id="pfile" accept="image/*" multiple>
+    </div>
+    <div class="err" id="perr" role="alert"></div>
+    <div class="btnrow"><button class="btn" id="psave" type="submit">Save product</button><button class="btn ghost" id="pcancel" type="button">Cancel</button></div>
+  </form>
+</dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+var S = { me: null, tab: "products" };
+var P = { id: null, existing: [], files: [] };
+var $ = function (id) { return document.getElementById(id); };
+var CFG = window.BIOSHOP_CONFIG || {};
+
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+function naira(n) { return "₦" + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
+function toast(msg) { var t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(function () { t.classList.remove("show"); }, 2600); }
+function dateStr(ms) { return new Date(ms).toLocaleDateString("en-NG", { day: "numeric", month: "short", year: "numeric" }); }
+
+async function api(method, url, body, rawType) {
+  var opt = { method: method, headers: {}, credentials: "same-origin" };
+  if (body !== undefined) {
+    if (rawType) { opt.headers["content-type"] = rawType; opt.body = body; }
+    else { opt.headers["content-type"] = "application/json"; opt.body = JSON.stringify(body); }
+  }
+  var r = await fetch(url, opt), d = null;
+  try { d = await r.json(); } catch (e) {}
+  if (r.status === 401) { location.href = "/login"; throw new Error("Please log in again."); }
+  if (!r.ok) throw new Error((d && d.error) || "Something went wrong. Try again.");
+  return d;
+}
+
+async function load() {
+  S.me = await api("GET", "/api/me");
+  render();
+}
+
+function storeUrl() { return location.origin + "/store/" + S.me.store.slug; }
+
+function render() {
+  var m = S.me, st = m.store, lim = m.limits;
+  var named = st.name !== "My store";
+  var contact = !!(st.whatsapp && st.accountNumber);
+  var hasProduct = m.products.length > 0;
+  var allDone = named && contact && hasProduct;
+
+  var html = '<div class="card"><div class="linkcard"><div><div class="muted" style="font-size:14px">Your store link</div><code>' + esc(location.host + "/store/" + st.slug) + '</code></div>' +
+    '<div class="btnrow"><button class="btn small" data-act="copylink">Copy link</button><a class="btn small ghost" href="/store/' + esc(st.slug) + '" target="_blank" rel="noopener">View store</a></div></div></div>';
+
+  if (!allDone) {
+    html += '<div class="card"><h2 style="font-size:22px;margin-bottom:12px">Get your store ready</h2><ol class="steps">' +
+      step(named, "Name your store and choose your link", "settings") +
+      step(contact, "Add your WhatsApp number and bank details", "settings") +
+      step(hasProduct, "Add your first product", "add") +
+      '<li><span class="tick">4</span><span class="t">Copy your link and paste it in your Instagram or TikTok bio</span></li></ol></div>';
+  }
+
+  html += '<div class="tabs" role="tablist">' + tab("products", "Products") + tab("settings", "Store details") + tab("plan", "Plan") + '</div>';
+  html += S.tab === "products" ? productsTab() : S.tab === "settings" ? settingsTab() : planTab();
+  $("app").innerHTML = html;
+}
+
+function step(done, text, go) {
+  return '<li class="' + (done ? "done" : "") + '"><span class="tick">' + (done ? "✓" : "") + '</span><span class="t">' + esc(text) + "</span>" +
+    (done ? "" : ' <button class="link" data-act="go" data-go="' + go + '">Do this</button>') + "</li>";
+}
+function tab(id, label) { return '<button class="tab" role="tab" data-act="tab" data-tab="' + id + '" aria-selected="' + (S.tab === id) + '">' + label + "</button>"; }
+
+function limitText(n) { return n >= 100000 ? "Unlimited" : String(n); }
+
+function productsTab() {
+  var m = S.me, lim = m.limits, atLimit = m.products.length >= lim.products;
+  var h = '<div class="toprow"><h2>Your products <span class="muted" style="font-size:16px">(' + m.products.length + (lim.products >= 100000 ? "" : " of " + lim.products) + ")</span></h2>" +
+    '<button class="btn" data-act="add"' + (atLimit ? " disabled" : "") + ">Add product</button></div>";
+  if (atLimit) h += '<p class="muted">Your ' + esc(lim.planName) + ' plan is full. <button class="link" data-act="go" data-go="plan">Upgrade to add more</button></p>';
+  if (!m.products.length) return h + '<div class="card"><p style="margin:0">No products yet. Add a photo, a name and a price, and customers can start ordering.</p></div>';
+  h += '<div class="plist">';
+  m.products.forEach(function (p) {
+    var th = p.images.length ? '<img src="' + esc(p.images[0].url) + '" alt="">' : esc(p.name.charAt(0).toUpperCase());
+    h += '<div class="prod"><div class="th">' + th + '</div><div><div class="nm">' + esc(p.name) + '</div><div class="pr">' + naira(p.price) + "</div>" +
+      (p.inStock ? "" : ' <span class="pill">Sold out</span>') + (p.hidden ? ' <span class="pill accent">Hidden: upgrade to show</span>' : "") +
+      '<div class="acts"><button class="btn small ghost" data-act="edit" data-id="' + esc(p.id) + '">Edit</button><button class="btn small danger" data-act="del" data-id="' + esc(p.id) + '">Delete</button></div></div></div>';
+  });
+  return h + "</div>";
+}
+
+function settingsTab() {
+  var st = S.me.store;
+  return '<form id="sform" class="card" novalidate>' +
+    field("Store name", '<input type="text" id="sname" maxlength="60" value="' + esc(st.name === "My store" ? "" : st.name) + '" placeholder="Adaeze\'s Closet">') +
+    field("Store link", '<input type="text" id="sslug" maxlength="30" value="' + esc(st.slug) + '" autocapitalize="none" autocomplete="off">', "Your link will be " + esc(location.host) + "/store/<b id=\"sslugprev\">" + esc(st.slug) + "</b>") +
+    field("Short bio (optional)", '<textarea id="sbio" maxlength="200" placeholder="What do you sell? Where are you based?">' + esc(st.bio) + "</textarea>") +
+    field("WhatsApp number", '<input type="tel" id="swa" inputmode="tel" value="' + esc(st.whatsapp) + '" placeholder="08012345678">', "Orders open a chat with this number.") +
+    '<h3 style="font-size:20px;margin:22px 0 12px">Bank details for transfers</h3>' +
+    field("Bank name", '<input type="text" id="sbank" maxlength="60" value="' + esc(st.bankName) + '" placeholder="GTBank">') +
+    field("Account name", '<input type="text" id="saname" maxlength="80" value="' + esc(st.accountName) + '">') +
+    field("Account number", '<input type="text" id="sanum" inputmode="numeric" maxlength="10" value="' + esc(st.accountNumber) + '" placeholder="0123456789">', "10 digits. Customers see this when they choose to pay by transfer.") +
+    '<div class="err" id="serr" role="alert"></div><button class="btn" type="submit">Save details</button></form>';
+}
+function field(label, input, hint) { return '<label class="field"><span>' + label + "</span>" + input + (hint ? "<small>" + hint + "</small>" : "") + "</label>"; }
+
+function planTab() {
+  var m = S.me, u = m.user, plans = m.plans, now = Date.now();
+  var h = '<div class="card"><div class="muted" style="font-size:14px">Your plan</div><h2 style="font-size:26px">' + esc(m.limits.planName) + "</h2>";
+  if (u.plan !== "free" && u.planExpiresAt) {
+    h += u.planExpiresAt > now ? '<p class="muted" style="margin:6px 0 0">Active until ' + dateStr(u.planExpiresAt) + ".</p>"
+      : '<p style="margin:6px 0 0">Your ' + esc(plans[u.plan].name) + " plan ended on " + dateStr(u.planExpiresAt) + ". Renew to show all your products again.</p>";
+  }
+  h += "</div>";
+  ["free", "starter", "pro"].forEach(function (k) {
+    var p = plans[k];
+    h += '<div class="plan' + (m.limits.planName === p.name ? " current" : "") + '"><h3>' + p.name + (m.limits.planName === p.name ? ' <span class="pill">Current</span>' : "") + "</h3>" +
+      '<div class="price">' + (p.price ? naira(p.price) + " a month" : "₦0") + "</div><ul><li>" + limitText(p.products) + " products</li><li>" + p.images + " image" + (p.images > 1 ? "s" : "") + " per product</li></ul></div>";
+  });
+  h += '<div class="card"><h3 style="font-size:22px;margin-bottom:8px">How to upgrade</h3><p class="pill accent" style="margin:0 0 12px">Launch offer: 50% off your first month for the first 20 sellers</p>';
+  if (CFG.accountNumber) {
+    h += "<p>Send the plan price to BIOSHOP's account, then message us on WhatsApp so we can switch your plan on.</p><div class=\"bankbox\">" +
+      row("Bank", CFG.bankName) + row("Account name", CFG.accountName) + row("Account number", CFG.accountNumber) + "</div>";
+  } else {
+    h += "<p>Message BIOSHOP on WhatsApp to upgrade your plan.</p>";
+  }
+  if (CFG.whatsapp) {
+    ["starter", "pro"].forEach(function (k) {
+      var text = "Hi BIOSHOP, I'd like the " + plans[k].name + " plan. My account email is " + u.email + ".";
+      h += '<a class="btn wa" style="margin:6px 8px 0 0" target="_blank" rel="noopener" href="https://wa.me/' + esc(CFG.whatsapp) + "?text=" + encodeURIComponent(text) + '">Message us about ' + plans[k].name + "</a>";
+    });
+  }
+  return h + "</div>";
+}
+function row(k, v) { return v ? "<div><span>" + esc(k) + "</span><b>" + esc(v) + "</b></div>" : ""; }
+
+/* ---------- actions ---------- */
+document.addEventListener("click", async function (e) {
+  var b = e.target.closest("[data-act]");
+  if (!b) return;
+  var act = b.getAttribute("data-act");
+  if (act === "tab") { S.tab = b.getAttribute("data-tab"); render(); }
+  else if (act === "go") { var g = b.getAttribute("data-go"); if (g === "add") { S.tab = "products"; render(); openProduct(null); } else { S.tab = g; render(); window.scrollTo({ top: 0, behavior: "smooth" }); } }
+  else if (act === "copylink") { copy(storeUrl()); }
+  else if (act === "add") openProduct(null);
+  else if (act === "edit") openProduct(b.getAttribute("data-id"));
+  else if (act === "del") {
+    var p = S.me.products.find(function (x) { return x.id === b.getAttribute("data-id"); });
+    if (p && confirm("Delete " + p.name + "? This can't be undone.")) {
+      try { await api("DELETE", "/api/products/" + p.id); await load(); toast("Product deleted"); } catch (x) { toast(x.message); }
+    }
+  }
+});
+
+function copy(text) {
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { toast("Link copied"); }, fb);
+  else fb();
+  function fb() { var t = document.createElement("textarea"); t.value = text; document.body.appendChild(t); t.select(); try { document.execCommand("copy"); toast("Link copied"); } catch (e) {} document.body.removeChild(t); }
+}
+
+document.addEventListener("input", function (e) {
+  if (e.target.id === "sslug") { var v = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""); e.target.value = v; var pv = $("sslugprev"); if (pv) pv.textContent = v; }
+});
+
+document.addEventListener("submit", async function (e) {
+  if (e.target.id !== "sform") return;
+  e.preventDefault();
+  var err = $("serr"); err.textContent = "";
+  try {
+    await api("PUT", "/api/store", {
+      name: $("sname").value, slug: $("sslug").value, bio: $("sbio").value, whatsapp: $("swa").value,
+      bankName: $("sbank").value, accountName: $("saname").value, accountNumber: $("sanum").value
+    });
+    await load(); toast("Saved");
+  } catch (x) { err.textContent = x.message; }
+});
+
+$("logout").addEventListener("click", async function () { try { await api("POST", "/api/logout", {}); } catch (e) {} location.href = "/"; });
+
+/* ---------- product dialog ---------- */
+function slots() { return S.me.limits.images - P.existing.length - P.files.length; }
+
+function openProduct(id) {
+  var p = id ? S.me.products.find(function (x) { return x.id === id; }) : null;
+  P = { id: id, existing: p ? p.images.slice() : [], files: [] };
+  $("ptitle").textContent = p ? "Edit product" : "Add a product";
+  $("pname").value = p ? p.name : "";
+  $("pprice").value = p ? p.price : "";
+  $("pdesc").value = p ? p.description : "";
+  $("pstock").checked = p ? p.inStock : true;
+  $("pstockrow").classList.toggle("hide", !p);
+  $("perr").textContent = "";
+  $("pfile").value = "";
+  renderThumbs();
+  if (!$("pdlg").open) $("pdlg").showModal();
+}
+
+function renderThumbs() {
+  var lim = S.me.limits.images, h = "";
+  P.existing.forEach(function (im, i) { h += '<div class="thumb"><img src="' + esc(im.url) + '" alt=""><button type="button" data-rm-existing="' + i + '" aria-label="Remove photo">×</button></div>'; });
+  P.files.forEach(function (f, i) { h += '<div class="thumb"><img src="' + esc(f.preview) + '" alt=""><button type="button" data-rm-new="' + i + '" aria-label="Remove photo">×</button></div>'; });
+  $("pthumbs").innerHTML = h;
+  $("pphotohint").textContent = "(up to " + lim + " on your " + S.me.limits.planName + " plan)";
+  $("pfile").classList.toggle("hide", slots() <= 0);
+}
+
+$("pthumbs").addEventListener("click", async function (e) {
+  var ex = e.target.closest("[data-rm-existing]"), nw = e.target.closest("[data-rm-new]");
+  if (nw) { var f = P.files.splice(Number(nw.getAttribute("data-rm-new")), 1)[0]; URL.revokeObjectURL(f.preview); renderThumbs(); }
+  else if (ex) {
+    var im = P.existing[Number(ex.getAttribute("data-rm-existing"))];
+    try { await api("DELETE", "/api/images/" + im.id); P.existing = P.existing.filter(function (x) { return x.id !== im.id; }); renderThumbs(); } catch (x) { $("perr").textContent = x.message; }
+  }
+});
+
+$("pfile").addEventListener("change", function (e) {
+  var picked = Array.prototype.slice.call(e.target.files || []), room = slots();
+  if (picked.length > room) $("perr").textContent = "Only " + room + " more photo" + (room === 1 ? "" : "s") + " fit on your plan.";
+  picked.slice(0, Math.max(room, 0)).forEach(function (f) { if (/^image\//.test(f.type)) P.files.push({ file: f, preview: URL.createObjectURL(f) }); });
+  e.target.value = "";
+  renderThumbs();
+});
+
+$("pcancel").addEventListener("click", function () { $("pdlg").close(); });
+$("pdlg").addEventListener("close", function () { P.files.forEach(function (f) { URL.revokeObjectURL(f.preview); }); });
+
+async function compress(file) {
+  var bmp;
+  try { bmp = await createImageBitmap(file); } catch (e) { throw new Error("Couldn't read one of the photos. Try a different one."); }
+  var scale = Math.min(1, 1000 / Math.max(bmp.width, bmp.height));
+  var c = document.createElement("canvas");
+  c.width = Math.round(bmp.width * scale); c.height = Math.round(bmp.height * scale);
+  c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+  var blob = await new Promise(function (r) { c.toBlob(r, "image/jpeg", 0.82); });
+  if (!blob) throw new Error("Couldn't process that photo.");
+  return blob;
+}
+
+$("pform").addEventListener("submit", async function (e) {
+  e.preventDefault();
+  var err = $("perr"), btn = $("psave");
+  err.textContent = "";
+  var name = $("pname").value.trim(), price = Number($("pprice").value);
+  if (name.length < 2) { err.textContent = "Enter the product name."; return; }
+  if (!price || price < 1) { err.textContent = "Enter a price in naira, like 15000."; return; }
+  btn.disabled = true; btn.textContent = "Saving…";
+  try {
+    var body = { name: name, price: price, description: $("pdesc").value, inStock: $("pstock").checked };
+    var id = P.id;
+    if (id) await api("PUT", "/api/products/" + id, body);
+    else id = (await api("POST", "/api/products", body)).id;
+    var failed = 0;
+    for (var i = 0; i < P.files.length; i++) {
+      btn.textContent = "Uploading photo " + (i + 1) + " of " + P.files.length + "…";
+      try { var blob = await compress(P.files[i].file); await api("POST", "/api/products/" + id + "/images", blob, "image/jpeg"); }
+      catch (x) { failed++; err.textContent = x.message; }
+    }
+    await load();
+    if (failed) { P.id = id; P.files = []; toast("Saved, but some photos didn't upload"); }
+    $("pdlg").close();
+    toast(failed ? "Saved, but some photos didn't upload" : "Product saved");
+  } catch (x) { err.textContent = x.message; }
+  btn.disabled = false; btn.textContent = "Save product";
+});
+
+load().catch(function (x) { $("app").innerHTML = '<p class="err">' + esc(x.message) + "</p>"; });
+</script>
+</body>
+</html>

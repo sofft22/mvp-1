@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Admin · BIOSHOP</title>
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<div class="wrap" style="padding-top:28px;padding-bottom:60px">
+  <h1 style="font-size:28px">BIOSHOP admin</h1>
+  <p class="muted">After a seller pays, set their plan here. Plans run for 30 days per month paid.</p>
+  <div class="card">
+    <label class="field"><span>Admin key</span><input type="password" id="key" autocomplete="off"></label>
+    <button class="btn small" id="load">Load sellers</button>
+    <div class="err" id="err" role="alert"></div>
+  </div>
+  <div style="overflow-x:auto"><table id="tbl" class="hide">
+    <thead><tr><th>Email</th><th>Store</th><th>Products</th><th>Plan</th><th>Set plan</th></tr></thead>
+    <tbody id="rows"></tbody>
+  </table></div>
+</div>
+<script>
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+var keyEl=document.getElementById("key"), err=document.getElementById("err");
+keyEl.value=sessionStorage.getItem("bs_admin")||"";
+function date(ms){return ms?new Date(ms).toLocaleDateString("en-NG",{day:"numeric",month:"short",year:"numeric"}):""}
+async function call(method,url,body){
+  var r=await fetch(url,{method:method,headers:{"x-admin-key":keyEl.value,"content-type":"application/json"},body:body?JSON.stringify(body):undefined});
+  var d=await r.json().catch(function(){return{}}); if(!r.ok) throw new Error(d.error||"Error"); return d;
+}
+async function load(){
+  err.textContent="";
+  try{
+    var d=await call("GET","/api/admin/users"); sessionStorage.setItem("bs_admin",keyEl.value);
+    document.getElementById("tbl").classList.remove("hide");
+    document.getElementById("rows").innerHTML=d.users.map(function(u){
+      var active=u.plan!=="free"&&u.plan_expires_at>Date.now();
+      return "<tr><td>"+esc(u.email)+"</td><td><a href='/store/"+esc(u.slug)+"' target='_blank'>"+esc(u.slug)+"</a></td><td>"+u.products+"</td>"+
+      "<td>"+(active?esc(u.plan)+" until "+date(u.plan_expires_at):"free")+"</td>"+
+      "<td><select data-email='"+esc(u.email)+"'><option value='starter'>Starter</option><option value='pro'>Pro</option><option value='free'>Free</option></select> "+
+      "<input type='number' min='1' max='24' value='1' style='width:60px;padding:6px'> mo <button class='btn small' data-set='"+esc(u.email)+"'>Save</button></td></tr>";
+    }).join("");
+  }catch(e){err.textContent=e.message}
+}
+document.getElementById("load").addEventListener("click",load);
+document.getElementById("rows").addEventListener("click",async function(e){
+  var b=e.target.closest("[data-set]"); if(!b) return;
+  var td=b.parentElement, plan=td.querySelector("select").value, months=td.querySelector("input").value;
+  try{ await call("POST","/api/admin/plan",{email:b.getAttribute("data-set"),plan:plan,months:Number(months)}); await load(); }catch(x){err.textContent=x.message}
+});
+</script>
+</body>
+</html>
