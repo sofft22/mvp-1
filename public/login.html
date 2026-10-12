@@ -3,34 +3,194 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Log in · BIOSHOP</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/app.css">
+<title>Log in · BioStore</title>
+<meta name="description" content="Log in to your BioStore.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF9F5;
+  --soft:#F4EFE7;
+  --ink:#0F0F0F;
+  --ink-2:#2B2B2B;
+  --muted:#6B6660;
+  --faint:#9A948C;
+  --line:#E6DFD4;
+  --accent:#C66B4F;
+  --cta:#1A1A1A;
+  --cta-ink:#FBF9F5;
+  --sans:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  box-sizing:border-box;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  min-height:100dvh;
+  background:var(--bg);
+  color:var(--ink);
+  font:400 16px/1.6 var(--sans);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:32px 20px calc(32px + env(safe-area-inset-bottom,0px));
+}
+
+.auth{
+  width:100%;
+  max-width:400px;
+}
+.logo{
+  display:inline-block;
+  font-size:16px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--ink);
+  text-decoration:none;
+}
+h1{
+  margin:28px 0 4px;
+  font-size:clamp(28px,7vw,36px);
+  font-weight:800;
+  letter-spacing:-.03em;
+  line-height:1.1;
+}
+.sub{
+  margin:0 0 32px;
+  font-size:15px;
+  color:var(--muted);
+}
+
+form{display:grid;gap:16px}
+
+.field{display:block}
+.field span{
+  display:block;
+  font-size:13px;
+  font-weight:600;
+  color:var(--ink);
+  margin-bottom:8px;
+  letter-spacing:-.005em;
+}
+.field input{
+  width:100%;
+  font:500 16px var(--sans);
+  padding:14px 16px;
+  border:1.5px solid var(--line);
+  border-radius:12px;
+  background:#fff;
+  color:var(--ink);
+  transition:border-color .15s, box-shadow .15s;
+  -webkit-appearance:none;
+  appearance:none;
+}
+.field input::placeholder{color:var(--faint)}
+.field input:focus{
+  outline:none;
+  border-color:var(--cta);
+  box-shadow:0 0 0 3px rgba(26,26,26,.08);
+}
+.field input:disabled{opacity:.6;cursor:not-allowed}
+
+.err{
+  min-height:20px;
+  font-size:14px;
+  font-weight:500;
+  color:#B14A2E;
+  letter-spacing:-.005em;
+}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  font:700 16px/1 var(--sans);
+  background:var(--cta);
+  color:var(--cta-ink);
+  padding:18px 24px;
+  border-radius:999px;
+  border:0;
+  cursor:pointer;
+  letter-spacing:-.01em;
+  transition:transform .15s, opacity .15s;
+  margin-top:4px;
+}
+.btn:hover:not(:disabled){opacity:.9;transform:translateY(-1px)}
+.btn:active:not(:disabled){transform:translateY(0)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+
+.alt{
+  margin:28px 0 0;
+  font-size:14px;
+  color:var(--muted);
+  text-align:center;
+}
+.alt a{
+  color:var(--ink);
+  font-weight:700;
+  text-decoration:underline;
+  text-decoration-color:var(--accent);
+  text-decoration-thickness:2px;
+  text-underline-offset:4px;
+}
+</style>
 </head>
 <body>
+
 <div class="auth">
-  <a class="logo" href="/">BIOSHOP</a>
-  <h1 style="margin-top:36px">Welcome back</h1>
+  <a class="logo" href="/">BioStore</a>
+  <h1>Welcome back.</h1>
+  <p class="sub">Log in to manage your store.</p>
+
   <form id="f" novalidate>
-    <label class="field"><span>Email</span><input type="email" name="email" autocomplete="email" inputmode="email" required></label>
-    <label class="field"><span>Password</span><input type="password" name="password" autocomplete="current-password" required></label>
+    <label class="field">
+      <span>Email</span>
+      <input type="email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required>
+    </label>
+
+    <label class="field">
+      <span>Password</span>
+      <input type="password" name="password" autocomplete="current-password" placeholder="••••••••" required>
+    </label>
+
     <div class="err" id="err" role="alert"></div>
+
     <button class="btn" id="go" type="submit">Log in</button>
   </form>
+
   <p class="alt">New here? <a href="/signup">Open your free store</a></p>
 </div>
+
 <script>
 document.getElementById("f").addEventListener("submit", async function (e) {
   e.preventDefault();
-  var f = e.target, err = document.getElementById("err"), btn = document.getElementById("go");
-  err.textContent = ""; btn.disabled = true; btn.textContent = "Logging in…";
+  var f = e.target;
+  var err = document.getElementById("err");
+  var btn = document.getElementById("go");
+
+  err.textContent = "";
+  btn.disabled = true;
+  btn.textContent = "Logging in…";
+
   try {
-    var r = await fetch("/api/login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ email: f.email.value, password: f.password.value }) });
+    var r = await fetch("/api/login", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ email: f.email.value, password: f.password.value })
+    });
     var d = await r.json().catch(function () { return {}; });
     if (!r.ok) throw new Error(d.error || "Something went wrong. Try again.");
     location.href = "/dashboard";
-  } catch (x) { err.textContent = x.message; btn.disabled = false; btn.textContent = "Log in"; }
+  } catch (x) {
+    err.textContent = x.message;
+    btn.disabled = false;
+    btn.textContent = "Log in";
+  }
 });
 </script>
 </body>
