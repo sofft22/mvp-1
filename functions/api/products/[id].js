@@ -29,8 +29,6 @@ export async function onRequestDelete({ request, env, params }) {
   if (!auth) return err("Not signed in.", 401);
   if (!(await owned(env, auth.store.id, params.id))) return err("Product not found.", 404);
 
-  const imgs = await env.DB.prepare("SELECT key FROM product_images WHERE product_id = ?").bind(params.id).all();
-  if (imgs.results.length) await env.IMAGES.delete(imgs.results.map((i) => i.key));
   await env.DB.prepare("DELETE FROM products WHERE id = ? AND store_id = ?").bind(params.id, auth.store.id).run();
   return json({ ok: true });
 }
