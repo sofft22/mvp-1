@@ -12,6 +12,7 @@
 :root{
   --bg:#FBF9F5;
   --soft:#F4EFE7;
+  --mat:#EFEAE2;
   --ink:#0F0F0F;
   --ink-2:#2B2B2B;
   --muted:#6B6660;
@@ -20,6 +21,7 @@
   --accent:#C66B4F;
   --accent-soft:#FBEEE7;
   --danger:#B14A2E;
+  --green:#226E3C;
   --wa:#25D366;
   --cta:#1A1A1A;
   --cta-ink:#FBF9F5;
@@ -105,11 +107,11 @@ main{padding:24px 0 80px}
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
   display:block;
 }
-.banner-actions{display:flex;gap:8px;flex-shrink:0}
+.banner-actions{display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap}
 
 /* ---------- Buttons ---------- */
 .btn{
-  display:inline-flex;align-items:center;justify-content:center;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
   font:700 14px/1 var(--sans);
   background:var(--cta);color:var(--cta-ink);
   padding:12px 18px;border-radius:999px;
@@ -513,10 +515,6 @@ dialog::backdrop{
   .dlg .bd{padding:24px}
   .dlg .ft{padding:18px 24px}
 }
-
-@media (min-width:900px){
-  .wrap{max-width:920px}
-}
 </style>
 <script src="/config.js"></script>
 </head>
@@ -531,7 +529,7 @@ dialog::backdrop{
   </div>
 </header>
 
-<main class="wrap" id="app"><p class="muted">Loading your store…</p></main>
+<main class="wrap" id="app"><p style="color:var(--muted)">Loading your store…</p></main>
 
 <dialog id="pdlg">
   <form class="dlg" id="pform" novalidate>
@@ -631,7 +629,7 @@ function render() {
 
   html += '<div class="tabs" role="tablist">' +
     tab("products", "Products") +
-    tab("settings", "Store details") +
+    tab("settings", "Settings") +
     tab("plan", "Plan") +
   '</div>';
 
