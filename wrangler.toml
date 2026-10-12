@@ -5,7 +5,7 @@ compatibility_date = "2024-09-23"
 [[d1_databases]]
 binding = "DB"
 database_name = "bioshop"
-database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+database_id = ""585a9fde-4953-4361-9344-c99b1738c64e""
 migrations_dir = "migrations"
 
 [[r2_buckets]]
