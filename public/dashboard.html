@@ -8,21 +8,21 @@
 <title>Dashboard · BioStore</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#FBF9F5;
-  --bg-2:#F4EFE7;
-  --ink:#0F0F0F;
+  --bg-2:#F1EBE1;
+  --ink:#0A0A0A;
   --muted:#6B6660;
   --faint:#9A948C;
   --line:#E6DFD4;
   --accent:#C66B4F;
   --accent-soft:#F5E4DB;
   --danger:#B14A2E;
-  --green:#226E3C;
+  --green:#1F6B37;
   --wa:#25D366;
-  --cta:#1A1A1A;
+  --cta:#0A0A0A;
   --cta-ink:#FBF9F5;
   --sans:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
   box-sizing:border-box;
@@ -43,7 +43,7 @@ a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
 [hidden],.hide{display:none!important}
 
-.wrap{max-width:720px;margin:0 auto;padding:0 20px}
+.wrap{max-width:640px;margin:0 auto;padding:0 22px}
 
 /* ---------- Header ---------- */
 .topbar{
@@ -54,52 +54,32 @@ a{color:inherit;text-decoration:none}
 }
 .topbar .wrap{
   display:flex;align-items:center;justify-content:space-between;
-  gap:12px;
-  height:60px;
-}
-.brand{
-  display:flex;align-items:baseline;gap:12px;
-  min-width:0;
+  gap:12px;height:64px;
 }
 .logo{
-  font-size:15px;font-weight:800;letter-spacing:.16em;
+  font-size:15px;font-weight:900;letter-spacing:.18em;
   text-transform:uppercase;flex-shrink:0;
 }
-.store-chip{
-  font-size:12.5px;font-weight:600;
-  color:var(--muted);
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-}
-.top-actions{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.top-actions{display:flex;align-items:center;gap:2px}
 .icon-btn{
   background:none;border:0;cursor:pointer;
-  width:34px;height:34px;
+  width:38px;height:38px;
   display:grid;place-items:center;
   color:var(--muted);
-  border-radius:8px;
+  border-radius:10px;
   transition:color .15s,background .15s;
 }
 .icon-btn:hover{color:var(--ink);background:var(--bg-2)}
-.icon-btn svg{width:17px;height:17px;stroke-width:1.9}
-.logout{
-  background:none;border:0;cursor:pointer;
-  font:600 13px var(--sans);
-  color:var(--muted);
-  padding:6px 8px;
-}
-.logout:hover{color:var(--ink)}
+.icon-btn svg{width:18px;height:18px;stroke-width:1.9}
 
 /* ---------- Desktop nav ---------- */
-.dnav{
-  display:none;
-  border-bottom:1px solid var(--line);
-}
-.dnav .wrap{display:flex;gap:2px}
+.dnav{display:none;border-bottom:1px solid var(--line)}
+.dnav .wrap{display:flex;gap:4px}
 .dnav-tab{
   background:none;border:0;cursor:pointer;
   font:600 14px var(--sans);
   color:var(--muted);
-  padding:14px 16px;
+  padding:16px 18px;
   border-bottom:2px solid transparent;
   margin-bottom:-1px;
   transition:color .15s,border-color .15s;
@@ -108,152 +88,163 @@ a{color:inherit;text-decoration:none}
 .dnav-tab[aria-current="page"]{
   color:var(--ink);
   border-bottom-color:var(--ink);
-  font-weight:700;
+  font-weight:800;
 }
 
 /* ---------- Page ---------- */
-main{
-  padding:32px 0 calc(120px + env(safe-area-inset-bottom,0px));
-}
-.greeting{margin-bottom:32px}
+main{padding:36px 0 calc(128px + env(safe-area-inset-bottom,0px))}
+
+/* Greeting — heavy weight hierarchy */
+.greeting{margin-bottom:48px}
 .greeting .hello{
-  font-size:14px;font-weight:600;
-  color:var(--muted);
-  margin:0 0 6px;
+  font-size:13px;font-weight:500;
+  color:var(--faint);
+  margin:0 0 10px;
+  letter-spacing:.02em;
+  text-transform:uppercase;
 }
 .greeting h1{
-  font-size:28px;font-weight:800;
-  letter-spacing:-.03em;
-  line-height:1.1;
+  font-size:34px;font-weight:800;
+  letter-spacing:-.04em;
+  line-height:1.05;
   margin:0;
 }
-.greeting h1 .name{color:var(--accent)}
+.greeting h1 strong{
+  font-weight:900;
+  color:var(--accent);
+}
 
 .page-title{
-  font-size:24px;font-weight:800;
-  letter-spacing:-.03em;
-  margin:0 0 24px;
+  font-size:28px;font-weight:800;
+  letter-spacing:-.035em;
+  margin:0 0 40px;
+  line-height:1.1;
 }
 
 /* ---------- Buttons ---------- */
 .btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
   font:700 14px/1 var(--sans);
   background:var(--cta);color:var(--cta-ink);
-  padding:13px 20px;border-radius:999px;
+  padding:15px 24px;border-radius:999px;
   border:0;cursor:pointer;
   transition:opacity .15s;
   white-space:nowrap;
+  letter-spacing:-.005em;
 }
-.btn:hover:not(:disabled){opacity:.88}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn:hover:not(:disabled){opacity:.86}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);font-weight:600}
 .btn.ghost:hover:not(:disabled){border-color:var(--ink)}
-.btn.small{padding:10px 16px;font-size:13px}
-.btn.wa{background:var(--wa);color:#073b1b}
+.btn.small{padding:11px 18px;font-size:13px}
+.btn.wa{background:var(--wa);color:#053b18;font-weight:800}
 .btn.block{width:100%}
 
-/* ---------- Store strip (bottom of Products) ---------- */
-.store-strip{
-  margin-top:40px;
-  padding-top:24px;
-  border-top:1px solid var(--line);
+/* Primary CTA block — reduced to one */
+.primary-cta{
   display:flex;align-items:center;justify-content:space-between;
-  gap:12px;flex-wrap:wrap;
+  gap:20px;
+  padding:24px 0 32px;
+  border-bottom:1px solid var(--line);
+  margin-bottom:8px;
+  flex-wrap:wrap;
 }
-.store-strip-copy{min-width:0}
-.store-strip-label{
-  font-size:10px;font-weight:800;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--faint);
-  margin-bottom:4px;
-}
-.store-strip-url{
-  font:500 12.5px ui-monospace,"SF Mono",Menlo,monospace;
-  color:var(--muted);
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  display:block;
-}
-.store-strip-actions{display:flex;gap:6px;flex-shrink:0}
-
-/* ---------- Product list ---------- */
-.sec-head{
-  display:flex;align-items:center;justify-content:space-between;
-  gap:12px;margin-bottom:20px;
-}
-.sec-head h2{
-  font-size:19px;font-weight:800;
+.primary-cta-copy{min-width:0;flex:1}
+.primary-cta-title{
+  font-size:16px;font-weight:800;
   letter-spacing:-.02em;
+  margin:0 0 4px;
+}
+.primary-cta-sub{
+  font-size:13px;color:var(--muted);
   margin:0;
 }
-.count{
+
+/* ---------- Product list ---------- */
+.list-head{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:12px;margin-bottom:8px;
+  margin-top:24px;
+}
+.list-head h2{
+  font-size:11px;font-weight:800;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--faint);
+  margin:0;
+}
+.list-head .count{
   font:600 12.5px var(--sans);
   color:var(--muted);
-  padding:4px 10px;
-  border:1px solid var(--line);
-  border-radius:999px;
+  font-variant-numeric:tabular-nums;
 }
-.add-row{margin-bottom:28px}
 
 .plist{display:grid;gap:0}
 .prod{
   display:grid;
-  grid-template-columns:64px 1fr auto;
-  gap:16px;
+  grid-template-columns:60px 1fr auto;
+  gap:18px;
   align-items:center;
-  padding:18px 0;
+  padding:22px 0;
   border-bottom:1px solid var(--line);
   cursor:pointer;
   background:none;border-left:0;border-right:0;border-top:0;
   width:100%;text-align:left;
   font-family:inherit;color:inherit;
-  transition:background .15s;
+  transition:opacity .15s;
+  -webkit-tap-highlight-color:transparent;
 }
-.prod:first-child{border-top:1px solid var(--line)}
-.prod:hover{background:var(--bg-2)}
+.prod:hover{opacity:.7}
+.prod:active{opacity:.5}
 .prod .th{
-  width:64px;height:64px;
+  width:60px;height:60px;
   background:var(--bg-2);
   display:grid;place-items:center;
-  font:800 20px var(--sans);
+  font:900 20px var(--sans);
   overflow:hidden;
+  border-radius:8px;
+  color:var(--faint);
 }
 .prod .th img{width:100%;height:100%;object-fit:cover;display:block}
 .prod .mid{min-width:0}
 .prod .nm{
   font-size:15.5px;font-weight:700;
-  letter-spacing:-.01em;
-  line-height:1.3;
-  margin-bottom:4px;
+  letter-spacing:-.015em;
+  line-height:1.25;
+  margin-bottom:5px;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 .prod .cat{
-  font-size:12.5px;font-weight:500;
+  font-size:11.5px;font-weight:600;
   color:var(--faint);
-  letter-spacing:.02em;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  letter-spacing:.04em;
+  text-transform:uppercase;
 }
 .prod .right{
   display:flex;flex-direction:column;
   align-items:flex-end;
-  gap:4px;
+  gap:6px;
   flex-shrink:0;
 }
 .prod .pr{
-  font-size:14.5px;font-weight:700;
+  font-size:15px;font-weight:800;
+  letter-spacing:-.015em;
   color:var(--ink);
   white-space:nowrap;
+  font-variant-numeric:tabular-nums;
 }
 .prod .vw{
-  font-size:12px;font-weight:500;
+  font-size:11px;font-weight:600;
   color:var(--faint);
   white-space:nowrap;
+  letter-spacing:.04em;
+  text-transform:uppercase;
 }
 
 .pill{
   display:inline-block;
-  font:700 10px var(--sans);
-  letter-spacing:.06em;text-transform:uppercase;
-  padding:2px 7px;border-radius:999px;
+  font:800 9.5px var(--sans);
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:2px 6px;border-radius:4px;
   background:var(--bg-2);color:var(--muted);
   margin-left:6px;
   vertical-align:middle;
@@ -261,42 +252,68 @@ main{
 .pill.accent{background:var(--accent-soft);color:var(--accent)}
 
 .empty{
-  padding:56px 20px;
+  padding:72px 20px;
   text-align:center;
   color:var(--muted);
-  font-size:14px;
+  font-size:13.5px;
   border-top:1px solid var(--line);
   border-bottom:1px solid var(--line);
 }
 
+/* ---------- Store strip ---------- */
+.store-strip{
+  margin-top:64px;
+  padding-top:36px;
+  border-top:1px solid var(--line);
+}
+.store-strip-label{
+  font-size:10px;font-weight:800;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--faint);
+  margin-bottom:12px;
+}
+.store-strip-url{
+  font:600 13.5px ui-monospace,"SF Mono",Menlo,monospace;
+  color:var(--ink);
+  word-break:break-all;
+  display:block;
+  margin-bottom:20px;
+  letter-spacing:-.01em;
+}
+.store-strip-actions{display:flex;gap:10px;flex-wrap:wrap}
+
 /* ---------- Forms ---------- */
-.form-section{margin-bottom:36px}
+.form-section{margin-bottom:56px}
 .form-section:last-of-type{margin-bottom:0}
 .section-title{
-  font-size:11px;font-weight:800;
-  letter-spacing:.2em;text-transform:uppercase;
-  color:var(--accent);
-  margin:0 0 16px;
+  font-size:10.5px;font-weight:900;
+  letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ink);
+  margin:0 0 24px;
+  display:flex;align-items:center;gap:12px;
+}
+.section-title::after{
+  content:"";flex:1;height:1px;background:var(--line);
 }
 
 .field{
-  padding:16px 0;
+  padding:22px 0;
   border-bottom:1px solid var(--line);
   display:grid;
   grid-template-columns:1fr;
-  gap:8px;
+  gap:12px;
 }
 .field:first-of-type{border-top:1px solid var(--line)}
 .field-label{
-  font-size:12.5px;font-weight:700;
+  font-size:13px;font-weight:700;
   color:var(--ink);
   letter-spacing:-.005em;
 }
 .field-hint{
   font-size:11.5px;
   color:var(--faint);
-  margin-top:3px;
+  margin-top:5px;
   font-weight:500;
+  line-height:1.4;
 }
 .field input[type="text"],
 .field input[type="tel"],
@@ -305,65 +322,65 @@ main{
 .field textarea,
 .field select{
   width:100%;
-  font:500 14.5px var(--sans);
-  padding:12px 14px;
+  font:500 15px var(--sans);
+  padding:14px 16px;
   border:1.5px solid var(--line);
   background:var(--bg);
   color:var(--ink);
-  border-radius:10px;
+  border-radius:12px;
   transition:border-color .15s,box-shadow .15s;
   -webkit-appearance:none;
   appearance:none;
 }
-.field textarea{min-height:76px;resize:vertical;line-height:1.5}
+.field textarea{min-height:92px;resize:vertical;line-height:1.5}
 .field input:focus,
 .field textarea:focus,
 .field select:focus{
   outline:none;
   border-color:var(--cta);
-  box-shadow:0 0 0 3px rgba(26,26,26,.06);
+  box-shadow:0 0 0 3px rgba(10,10,10,.07);
 }
 .field input::placeholder,
 .field textarea::placeholder{color:var(--faint)}
 
 .toggle-row{
   display:flex;align-items:center;justify-content:space-between;
-  gap:16px;
-  padding:16px 0;
+  gap:16px;padding:22px 0;
   border-top:1px solid var(--line);
   border-bottom:1px solid var(--line);
 }
-.toggle-name{font-size:13.5px;font-weight:700;margin:0 0 3px}
+.toggle-name{font-size:14px;font-weight:700;margin:0 0 5px;letter-spacing:-.01em}
 .toggle-desc{font-size:12.5px;color:var(--muted);margin:0}
 .switch{
-  position:relative;
-  width:44px;height:26px;
-  background:rgba(26,26,26,.15);
+  position:relative;width:46px;height:28px;
+  background:rgba(10,10,10,.14);
   border:0;padding:0;cursor:pointer;
   border-radius:999px;flex-shrink:0;
   transition:background .2s;
 }
 .switch::after{
   content:"";position:absolute;top:3px;left:3px;
-  width:20px;height:20px;background:#fff;
+  width:22px;height:22px;background:#fff;
   border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.15);
   transition:transform .2s;
 }
-.switch[aria-checked="true"]{background:var(--ink)}
+.switch[aria-checked="true"]{background:var(--cta)}
 .switch[aria-checked="true"]::after{transform:translateX(18px)}
 
-/* images */
 .imgs-head{
   display:flex;justify-content:space-between;align-items:baseline;
-  gap:12px;margin-bottom:14px;
+  gap:12px;margin-bottom:18px;
 }
-.imgs-count{font:600 12px var(--sans);color:var(--faint)}
-.imgs{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+.imgs-count{
+  font:700 11.5px var(--sans);
+  color:var(--faint);
+  letter-spacing:.08em;text-transform:uppercase;
 }
+.imgs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .img-cell{
   position:relative;aspect-ratio:1;
   background:var(--bg-2);overflow:hidden;
+  border-radius:10px;
 }
 .img-cell img{width:100%;height:100%;object-fit:cover;display:block}
 .img-cell .x{
@@ -374,185 +391,202 @@ main{
   color:var(--ink);
 }
 .img-cell .x svg{width:14px;height:14px}
-.img-cell .x:hover{color:var(--accent)}
 .img-cell .main-tag{
   position:absolute;bottom:6px;left:6px;
-  font:700 9px var(--sans);
-  letter-spacing:.18em;text-transform:uppercase;
-  background:var(--ink);color:var(--bg);
-  padding:3px 7px;
+  font:800 9px var(--sans);
+  letter-spacing:.16em;text-transform:uppercase;
+  background:var(--cta);color:var(--bg);
+  padding:3px 7px;border-radius:4px;
 }
 .img-add{
   aspect-ratio:1;
   border:1.5px dashed var(--line);
   display:grid;place-items:center;gap:8px;
   cursor:pointer;
-  font:700 10px var(--sans);
+  font:800 10px var(--sans);
   letter-spacing:.18em;text-transform:uppercase;
   color:var(--muted);
   text-align:center;padding:8px;
+  border-radius:10px;
   transition:color .2s,border-color .2s;
 }
 .img-add:hover{color:var(--accent);border-color:var(--accent)}
 .img-add svg{width:18px;height:18px;display:block;margin:0 auto}
 .img-add input{display:none}
 
-/* variants */
 .vhead{
   display:flex;justify-content:space-between;align-items:baseline;
-  gap:12px;margin-bottom:14px;
+  gap:12px;margin-bottom:18px;
 }
 .vadd{
   background:none;border:0;cursor:pointer;
-  font:700 11px var(--sans);
-  letter-spacing:.16em;text-transform:uppercase;
+  font:800 11px var(--sans);
+  letter-spacing:.18em;text-transform:uppercase;
   color:var(--ink);
   display:inline-flex;align-items:center;gap:6px;
   padding:4px;
 }
-.vadd:hover{color:var(--accent)}
 .vadd svg{width:13px;height:13px}
 .vempty{
-  padding:28px 16px;text-align:center;
+  padding:36px 20px;text-align:center;
   border:1.5px dashed var(--line);
   font-size:13px;color:var(--muted);
+  border-radius:10px;
 }
-.vitem{padding:16px 0;border-top:1px solid var(--line)}
+.vitem{padding:22px 0;border-top:1px solid var(--line)}
 .vitem:last-child{border-bottom:1px solid var(--line)}
-.vgrid{display:grid;grid-template-columns:1fr;gap:12px}
+.vgrid{display:grid;grid-template-columns:1fr;gap:16px}
 .vlabel{
-  font:700 11px var(--sans);
-  letter-spacing:.16em;text-transform:uppercase;
-  color:var(--muted);display:block;margin-bottom:6px;
+  font:800 10.5px var(--sans);
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--muted);display:block;margin-bottom:8px;
 }
 .vitem input{
   width:100%;
   font:500 14px var(--sans);
-  padding:11px 13px;
+  padding:12px 14px;
   border:1.5px solid var(--line);
   background:var(--bg);
   border-radius:10px;outline:none;
 }
-.vitem input:focus{border-color:var(--cta)}
 .vremove{
-  margin-top:12px;
+  margin-top:16px;
   background:none;border:0;cursor:pointer;
-  font:700 11px var(--sans);
-  letter-spacing:.14em;text-transform:uppercase;
+  font:800 11px var(--sans);
+  letter-spacing:.16em;text-transform:uppercase;
   color:var(--danger);padding:0;
-  text-decoration:underline;text-underline-offset:4px;
 }
 
-/* form actions */
 .form-actions{
-  display:flex;gap:12px;align-items:center;flex-wrap:wrap;
-  margin-top:40px;padding-top:28px;
+  display:flex;gap:14px;align-items:center;flex-wrap:wrap;
+  margin-top:64px;padding-top:40px;
   border-top:1px solid var(--line);
 }
 .del-btn{
   background:none;border:0;cursor:pointer;
   font:700 13px var(--sans);
-  color:var(--danger);padding:12px 0;
+  color:var(--danger);padding:14px 0;
   margin-right:auto;
-  text-decoration:underline;text-underline-offset:4px;
 }
-.err{font-size:13.5px;font-weight:600;color:var(--danger);margin-top:16px}
+.err{
+  font-size:13.5px;font-weight:600;
+  color:var(--danger);margin-top:24px;
+}
 
 .back{
-  display:inline-flex;align-items:center;gap:6px;
+  display:inline-flex;align-items:center;gap:8px;
   background:none;border:0;cursor:pointer;
-  font:600 13px var(--sans);
+  font:700 12px var(--sans);
   color:var(--muted);padding:0;
-  margin-bottom:24px;
+  margin-bottom:36px;
+  letter-spacing:.14em;text-transform:uppercase;
 }
 .back:hover{color:var(--ink)}
 .back svg{width:14px;height:14px}
 
-/* ---------- Categories in Settings ---------- */
-.cat-list{margin-bottom:16px}
+/* ---------- Categories ---------- */
+.cat-list{margin-bottom:20px}
 .cat-item{
   display:flex;align-items:center;justify-content:space-between;
-  gap:12px;padding:14px 0;
+  gap:12px;padding:18px 0;
   border-bottom:1px solid var(--line);
 }
 .cat-item:first-child{border-top:1px solid var(--line)}
-.cat-name{font-size:14.5px;font-weight:600}
-.cat-actions{display:flex;gap:12px;flex-shrink:0}
+.cat-name{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.cat-actions{display:flex;gap:18px;flex-shrink:0}
 .cat-actions button{
   background:none;border:0;cursor:pointer;
-  font:600 12.5px var(--sans);
+  font:700 11.5px var(--sans);
+  letter-spacing:.08em;text-transform:uppercase;
   color:var(--muted);padding:0;
 }
 .cat-actions button:hover{color:var(--ink)}
 .cat-actions button.danger:hover{color:var(--danger)}
-.cat-add-row{
-  display:flex;gap:8px;align-items:stretch;
-}
+.cat-add-row{display:flex;gap:10px;align-items:stretch;margin-top:12px}
 .cat-add-row input{
   flex:1;
   font:500 14px var(--sans);
-  padding:12px 14px;
+  padding:13px 16px;
   border:1.5px solid var(--line);
   background:var(--bg);
-  border-radius:10px;
+  border-radius:12px;
   outline:none;
 }
-.cat-add-row input:focus{border-color:var(--cta)}
+
+/* ---------- Account row ---------- */
+.account-row{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:22px 0;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.account-email{
+  font-size:13.5px;font-weight:600;
+  color:var(--muted);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.btn-logout{
+  background:none;border:0;cursor:pointer;
+  font:800 12px var(--sans);
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--danger);padding:8px 4px;
+}
 
 /* ---------- Plan ---------- */
-.plan-current{padding-bottom:28px;border-bottom:1px solid var(--line);margin-bottom:32px}
+.plan-current{padding-bottom:40px;border-bottom:1px solid var(--line);margin-bottom:48px}
 .plan-label{
-  font-size:10px;font-weight:800;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--faint);margin-bottom:8px;
+  font-size:10px;font-weight:800;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--faint);margin-bottom:12px;
 }
 .plan-name{
-  font-size:26px;font-weight:800;letter-spacing:-.03em;
+  font-size:34px;font-weight:800;letter-spacing:-.04em;
   line-height:1;margin:0;
 }
-.plan-meta{font-size:13px;color:var(--muted);margin-top:8px}
+.plan-meta{font-size:13px;color:var(--muted);margin-top:12px}
 
-.plan-row{padding:20px 0;border-bottom:1px solid var(--line)}
+.plan-row{padding:28px 0;border-bottom:1px solid var(--line)}
 .plan-row:last-of-type{border-bottom:0}
 .plan-row h3{
-  font-size:15px;font-weight:800;letter-spacing:-.015em;
-  margin:0 0 6px;
-  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  font-size:16px;font-weight:800;letter-spacing:-.02em;
+  margin:0 0 8px;
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
 }
-.plan-row .price{font-size:13.5px;font-weight:700;margin-bottom:8px}
+.plan-row .price{font-size:14px;font-weight:700;margin-bottom:12px}
 .plan-row .price small{font-weight:500;color:var(--muted);font-size:12.5px}
 .plan-row ul{
   list-style:none;padding:0;margin:0;
-  color:var(--muted);font-size:13px;
-  display:grid;gap:3px;
+  color:var(--muted);font-size:13.5px;
+  display:grid;gap:5px;
 }
 .plan-row.current{
   background:var(--accent-soft);
-  margin:0 -20px;padding:20px;
+  margin:0 -22px;padding:28px 22px;
 }
 .bankbox{
-  background:var(--bg-2);padding:16px 18px;
-  margin-bottom:16px;font-size:13px;border-radius:10px;
+  background:var(--bg-2);padding:20px 22px;
+  margin-bottom:20px;font-size:13.5px;border-radius:12px;
 }
 .bankbox div{
   display:flex;justify-content:space-between;gap:12px;
-  padding:4px 0;
+  padding:6px 0;
 }
 .bankbox span{color:var(--muted)}
-.bankbox b{font-weight:700}
+.bankbox b{font-weight:800}
 
 /* ---------- Bottom nav ---------- */
 .bnav{
   position:fixed;left:0;right:0;bottom:0;z-index:40;
   background:var(--bg);border-top:1px solid var(--line);
-  padding:8px 0 calc(6px + env(safe-area-inset-bottom,0px));
+  padding:10px 0 calc(8px + env(safe-area-inset-bottom,0px));
   display:grid;grid-template-columns:repeat(3,1fr);
 }
 .bnav-item{
   background:none;border:0;cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;gap:4px;
-  padding:6px 4px;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  padding:8px 4px;
   color:var(--muted);
-  font:600 10.5px var(--sans);
+  font:700 10px var(--sans);
+  letter-spacing:.06em;
   transition:color .15s;
   -webkit-tap-highlight-color:transparent;
 }
@@ -561,16 +595,17 @@ main{
   stroke-width:1.75;fill:none;stroke:currentColor;
 }
 .bnav-item[aria-current="page"]{color:var(--ink)}
-.bnav-item[aria-current="page"] svg{stroke-width:2.2}
+.bnav-item[aria-current="page"] svg{stroke-width:2.4}
 
 /* ---------- Toast ---------- */
 #toast{
-  position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom,0px));
+  position:fixed;left:50%;bottom:calc(104px + env(safe-area-inset-bottom,0px));
   transform:translate(-50%,140%);
-  background:var(--ink);color:var(--cta-ink);
-  font:600 13.5px var(--sans);
-  padding:12px 20px;border-radius:999px;
-  box-shadow:0 10px 30px -10px rgba(15,15,15,.5);
+  background:var(--cta);color:var(--cta-ink);
+  font:700 13px var(--sans);
+  letter-spacing:-.005em;
+  padding:14px 22px;border-radius:999px;
+  box-shadow:0 10px 30px -10px rgba(10,10,10,.5);
   transition:transform .3s cubic-bezier(.2,.8,.3,1);
   z-index:100;max-width:calc(100% - 40px);text-align:center;
 }
@@ -578,31 +613,29 @@ main{
 
 /* ---------- Desktop ---------- */
 @media (min-width:720px){
-  .wrap{padding:0 32px}
+  .wrap{padding:0 36px}
   .dnav{display:block}
-  main{padding:48px 0 100px}
-  .topbar .wrap{height:68px}
+  main{padding:64px 0 100px}
+  .topbar .wrap{height:72px}
   .logo{font-size:16px}
-  .store-chip{font-size:13px;color:var(--ink);font-weight:500}
   .bnav{display:none}
-  #toast{bottom:32px}
-  .greeting{margin-bottom:40px}
-  .greeting h1{font-size:34px}
-  .page-title{font-size:28px;margin-bottom:32px}
+  #toast{bottom:40px}
+  .greeting{margin-bottom:64px}
+  .greeting h1{font-size:42px}
+  .page-title{font-size:32px;margin-bottom:48px}
   .field{
     grid-template-columns:220px 1fr;
-    gap:28px;align-items:center;
-    padding:18px 0;
+    gap:36px;align-items:center;
+    padding:26px 0;
   }
   .field.stack{align-items:flex-start}
-  .field.stack .field-label-wrap{padding-top:10px}
-  .imgs{grid-template-columns:repeat(3,120px)}
-  .vgrid{grid-template-columns:1fr 160px}
-  .prod{grid-template-columns:72px 1fr auto;gap:20px;padding:20px 0}
+  .field.stack .field-label-wrap{padding-top:14px}
+  .imgs{grid-template-columns:repeat(3,130px)}
+  .vgrid{grid-template-columns:1fr 180px}
+  .prod{grid-template-columns:72px 1fr auto;gap:26px;padding:26px 0}
   .prod .th{width:72px;height:72px}
-  .form-section{margin-bottom:44px}
-  .prod:hover{background:transparent}
-  .prod:hover .nm{color:var(--accent)}
+  .form-section{margin-bottom:64px}
+  .primary-cta{padding:32px 0 40px}
 }
 </style>
 <script src="/config.js"></script>
@@ -611,18 +644,14 @@ main{
 
 <header class="topbar">
   <div class="wrap">
-    <div class="brand">
-      <a class="logo" href="#/products">BioStore</a>
-      <span class="store-chip" id="storeChip"></span>
-    </div>
+    <a class="logo" href="#/products">BioStore</a>
     <div class="top-actions">
-      <button class="icon-btn" id="copyLink" type="button" aria-label="Copy store link" title="Copy store link">
+      <button class="icon-btn" id="copyLink" type="button" aria-label="Copy store link">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
       </button>
-      <a class="icon-btn" id="viewStore" href="#" target="_blank" rel="noopener" aria-label="View store" title="View store">
+      <a class="icon-btn" id="viewStore" href="#" target="_blank" rel="noopener" aria-label="View store">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
       </a>
-      <button class="logout" id="logout" type="button">Log out</button>
     </div>
   </div>
   <nav class="dnav">
@@ -658,7 +687,7 @@ main{
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>
-var S = { me: null, route: "products", editing: null };
+var S = { me: null, route: "products", editing: null, categories: [] };
 var P = { id: null, images: [], variants: [], inStock: true };
 var $ = function (id) { return document.getElementById(id); };
 var CFG = window.BIOSHOP_CONFIG || {};
@@ -683,7 +712,6 @@ async function api(method, url, body, rawType) {
 
 function storeUrl() { return location.origin + "/store/" + S.me.store.slug; }
 
-/* ---------- Routing ---------- */
 function parseRoute() {
   var h = location.hash.replace(/^#\/?/, "");
   var parts = h.split("/").filter(Boolean);
@@ -715,19 +743,20 @@ document.addEventListener("click", function (e) {
   navigate("/" + b.getAttribute("data-route"));
 });
 
-/* ---------- Data ---------- */
 async function load() {
   S.me = await api("GET", "/api/me");
   var st = S.me.store;
-  $("storeChip").textContent = st.name && st.name !== "My store" ? st.name : "";
   $("viewStore").href = "/store/" + st.slug;
+  try {
+    var cd = await api("GET", "/api/categories");
+    S.categories = cd.categories || [];
+  } catch (e) { S.categories = []; }
   var r = parseRoute();
   if (r.name === "product") openForm(r.id);
   else { S.route = r.name; S.editing = null; render(); }
   updateNavActive();
 }
 
-/* ---------- Render ---------- */
 function render() {
   var html = "";
   if (S.editing !== null) html = formView();
@@ -735,48 +764,51 @@ function render() {
   else if (S.route === "settings") html = settingsView();
   else if (S.route === "plan") html = planView();
   $("app").innerHTML = html;
-
   if (S.editing !== null) wireForm();
   if (S.route === "settings") wireSettings();
 }
 
-/* ---------- Products view ---------- */
+/* ============ Products ============ */
 function productsView() {
   var m = S.me, lim = m.limits, atLimit = m.products.length >= lim.products;
   var st = m.store;
   var named = st.name && st.name !== "My store";
   var who = named ? st.name : "there";
 
-  var h = '';
-
-  // Greeting
-  h += '<div class="greeting">' +
+  var h = '<div class="greeting">' +
     '<p class="hello">Welcome back</p>' +
-    '<h1>Hey, <span class="name">' + esc(who) + '</span>.</h1>' +
+    '<h1>Hey, <strong>' + esc(who) + '</strong>.</h1>' +
   '</div>';
 
-  // Section head + add
-  h += '<div class="sec-head">' +
-    '<h2>Products</h2>' +
-    '<div class="count">' + m.products.length + (lim.products >= 100000 ? "" : " / " + lim.products) + '</div>' +
-  '</div>';
-
-  h += '<div class="add-row">' +
+  // Primary CTA — the one big action
+  h += '<div class="primary-cta">' +
+    '<div class="primary-cta-copy">' +
+      '<p class="primary-cta-title">' + (m.products.length ? "Add another product" : "Add your first product") + '</p>' +
+      '<p class="primary-cta-sub">Photo, name, price. That\'s it.</p>' +
+    '</div>' +
     '<button class="btn" data-act="add"' + (atLimit ? " disabled" : "") + ' type="button">+ Add product</button>' +
-    (atLimit ? ' <span style="margin-left:12px;font-size:13px;color:var(--muted)">Plan full. ' +
-      '<button data-route="plan" style="background:none;border:0;cursor:pointer;color:var(--accent);font-weight:700;padding:0 4px;font-family:inherit;font-size:13px" type="button">Upgrade</button></span>' : "") +
   '</div>';
 
-  // List
+  if (atLimit) {
+    h += '<p style="margin:12px 0 0;font-size:13px;color:var(--muted)">Your ' + esc(lim.planName) + ' plan is full. ' +
+      '<button data-route="plan" style="background:none;border:0;cursor:pointer;color:var(--accent);font-weight:800;padding:0;font-family:inherit;font-size:13px;text-decoration:underline;text-underline-offset:3px" type="button">Upgrade</button></p>';
+  }
+
+  // Product list
+  h += '<div class="list-head">' +
+    '<h2>Products</h2>' +
+    '<div class="count">' + m.products.length + (lim.products >= 100000 ? "" : " of " + lim.products) + '</div>' +
+  '</div>';
+
   if (!m.products.length) {
-    h += '<div class="empty">No products yet. Add your first one.</div>';
+    h += '<div class="empty">No products yet.</div>';
   } else {
     h += '<div class="plist">';
     m.products.forEach(function (p) {
       var th = (p.images && p.images.length)
         ? '<img src="' + esc(p.images[0].url) + '" alt="">'
         : esc((p.name || "?").charAt(0).toUpperCase());
-      var cat = p.category || p.category_id || "Uncategorized";
+      var cat = p.category || "";
       var views = p.views || 0;
       h += '<button class="prod" data-act="edit" data-id="' + esc(p.id) + '" type="button">' +
         '<div class="th">' + th + '</div>' +
@@ -785,7 +817,7 @@ function productsView() {
             (p.hidden ? ' <span class="pill accent">Hidden</span>' : "") +
             (p.inStock === false ? ' <span class="pill">Sold out</span>' : "") +
           '</div>' +
-          '<div class="cat">' + esc(cat) + '</div>' +
+          (cat ? '<div class="cat">' + esc(cat) + '</div>' : '') +
         '</div>' +
         '<div class="right">' +
           '<span class="pr">' + naira(p.price) + '</span>' +
@@ -796,27 +828,24 @@ function productsView() {
     h += '</div>';
   }
 
-  // Store strip at bottom
   h += '<div class="store-strip">' +
-    '<div class="store-strip-copy">' +
-      '<div class="store-strip-label">Your store link</div>' +
-      '<span class="store-strip-url">' + esc(location.host + "/store/" + st.slug) + '</span>' +
-    '</div>' +
+    '<div class="store-strip-label">Your store link</div>' +
+    '<span class="store-strip-url">' + esc(location.host + "/store/" + st.slug) + '</span>' +
     '<div class="store-strip-actions">' +
-      '<button class="btn ghost small" data-act="copylink" type="button">Copy</button>' +
-      '<a class="btn small" href="/store/' + esc(st.slug) + '" target="_blank" rel="noopener">View</a>' +
+      '<button class="btn ghost small" data-act="copylink" type="button">Copy link</button>' +
+      '<a class="btn small" href="/store/' + esc(st.slug) + '" target="_blank" rel="noopener">View store</a>' +
     '</div>' +
   '</div>';
 
   return h;
 }
 
-/* ---------- Product form ---------- */
+/* ============ Product form ============ */
 function formView() {
   var isNew = !P.id;
   var h = '';
   h += '<button class="back" data-act="close-form" type="button">' +
-    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>' +
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>' +
     'Products' +
   '</button>';
   h += '<h1 class="page-title">' + (isNew ? "New product" : "Edit product") + '</h1>';
@@ -858,7 +887,7 @@ function formView() {
     '<div class="vhead">' +
       '<h3 class="section-title" style="margin:0">Variants</h3>' +
       '<button type="button" class="vadd" id="vadd">' +
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>' +
         'Add' +
       '</button>' +
     '</div>' +
@@ -883,12 +912,14 @@ function field(label, input, hint, stack) {
 }
 
 function catOptions() {
-  var cats = (S.categories && S.categories.length) ? S.categories : (CFG.categories || [{ id: "clothing", label: "Clothing" }]);
-  return cats.map(function (c) {
-    var id = c.id || c.slug;
-    var label = c.label || c.name;
-    return '<option value="' + esc(id) + '"' + (P.category === id ? ' selected' : '') + '>' + esc(label) + '</option>';
-  }).join('');
+  var cats = S.categories && S.categories.length ? S.categories : (CFG.categories || []);
+  if (!cats.length) return '<option value="">No categories yet</option>';
+  var h = '<option value="">None</option>';
+  cats.forEach(function (c) {
+    var label = c.name || c.label;
+    h += '<option value="' + esc(label) + '"' + (P.category === label ? ' selected' : '') + '>' + esc(label) + '</option>';
+  });
+  return h;
 }
 
 function openForm(id) {
@@ -901,7 +932,7 @@ function openForm(id) {
       description: p.description || "",
       price: p.price || "",
       compare: p.compareAtPrice || p.compare_at_price || "",
-      category: p.category || p.category_id || "",
+      category: p.category || "",
       badge: p.badge || "",
       inStock: !(p.inStock === false || p.in_stock === false),
       images: (p.images || []).map(function (i) { return i.url || i; }),
@@ -972,7 +1003,7 @@ function renderImages() {
     h += '<div class="img-cell">' +
       '<img src="' + esc(url) + '" alt="">' +
       '<button type="button" class="x" data-rm="' + i + '" aria-label="Remove">' +
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
       '</button>' +
       (i === 0 ? '<span class="main-tag">Main</span>' : "") +
     '</div>';
@@ -980,7 +1011,7 @@ function renderImages() {
   if (P.images.length < lim) {
     h += '<label class="img-add">' +
       '<input type="file" accept="image/*" id="imgInput">' +
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>' +
       '<span>Add</span>' +
     '</label>';
   }
@@ -1081,9 +1112,10 @@ function showFormErr(msg) {
   err.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
-/* ---------- Settings view ---------- */
+/* ============ Settings ============ */
 function settingsView() {
   var st = S.me.store;
+  var u = S.me.user || {};
   var h = '<h1 class="page-title">Settings</h1>';
   h += '<form id="sform" novalidate>';
 
@@ -1110,13 +1142,20 @@ function settingsView() {
   h += '<div class="form-actions"><button type="submit" class="btn" id="ssave">Save</button></div>';
   h += '</form>';
 
-  // Categories
-  h += '<div class="form-section" style="margin-top:48px">' +
+  h += '<div class="form-section" style="margin-top:72px">' +
     '<h3 class="section-title">Categories</h3>' +
-    '<div class="cat-list" id="catList"><p style="color:var(--faint);font-size:13px;margin:0">Loading…</p></div>' +
+    '<div class="cat-list" id="catList"></div>' +
     '<div class="cat-add-row">' +
       '<input type="text" id="newCat" placeholder="Add a category" maxlength="40">' +
       '<button class="btn small" type="button" id="addCat">Add</button>' +
+    '</div>' +
+  '</div>';
+
+  h += '<div class="form-section" style="margin-top:72px">' +
+    '<h3 class="section-title">Account</h3>' +
+    '<div class="account-row">' +
+      '<span class="account-email">' + esc(u.email || st.email || "") + '</span>' +
+      '<button type="button" class="btn-logout" id="logoutBtn">Log out</button>' +
     '</div>' +
   '</div>';
 
@@ -1153,8 +1192,14 @@ function wireSettings() {
     btn.disabled = false; btn.textContent = "Save";
   });
 
-  // Categories
-  loadCategories();
+  var logout = $("logoutBtn");
+  if (logout) logout.addEventListener("click", async function () {
+    if (!confirm("Log out?")) return;
+    try { await api("POST", "/api/logout", {}); } catch (e) {}
+    location.href = "/";
+  });
+
+  renderCategories();
   var add = $("addCat");
   var inp2 = $("newCat");
   if (add && inp2) {
@@ -1163,24 +1208,11 @@ function wireSettings() {
   }
 }
 
-async function loadCategories() {
-  var list = $("catList");
-  if (!list) return;
-  try {
-    var d = await api("GET", "/api/categories");
-    S.categories = d.categories || [];
-    renderCategories();
-  } catch (x) {
-    list.innerHTML = '<p style="color:var(--faint);font-size:13px;margin:0">No categories yet.</p>';
-    S.categories = [];
-  }
-}
-
 function renderCategories() {
   var list = $("catList");
   if (!list) return;
   if (!S.categories.length) {
-    list.innerHTML = '<p style="color:var(--faint);font-size:13px;margin:0">No categories yet. Add one below.</p>';
+    list.innerHTML = '<p style="color:var(--faint);font-size:13px;margin:0">No categories yet.</p>';
     return;
   }
   list.innerHTML = S.categories.map(function (c) {
@@ -1202,8 +1234,10 @@ async function addCategory() {
   try {
     await api("POST", "/api/categories", { name: name });
     inp.value = "";
-    await loadCategories();
-    toast("Category added");
+    var cd = await api("GET", "/api/categories");
+    S.categories = cd.categories || [];
+    renderCategories();
+    toast("Added");
   } catch (x) { alert(x.message); }
   inp.disabled = false;
   inp.focus();
@@ -1213,24 +1247,34 @@ document.addEventListener("click", async function (e) {
   var rn = e.target.closest("[data-cat-rename]");
   if (rn) {
     var id = rn.getAttribute("data-cat-rename");
-    var c = (S.categories || []).find(function (x) { return x.id === id; });
+    var c = S.categories.find(function (x) { return x.id === id; });
     if (!c) return;
     var name = prompt("Rename category", c.name);
     if (!name || name === c.name) return;
-    try { await api("PUT", "/api/categories/" + id, { name: name }); await loadCategories(); toast("Renamed"); }
-    catch (x) { alert(x.message); }
+    try {
+      await api("PUT", "/api/categories/" + id, { name: name });
+      var cd = await api("GET", "/api/categories");
+      S.categories = cd.categories || [];
+      renderCategories();
+      toast("Renamed");
+    } catch (x) { alert(x.message); }
     return;
   }
   var dl = e.target.closest("[data-cat-del]");
   if (dl) {
     var id2 = dl.getAttribute("data-cat-del");
     if (!confirm("Delete this category?")) return;
-    try { await api("DELETE", "/api/categories/" + id2); await loadCategories(); toast("Deleted"); }
-    catch (x) { alert(x.message); }
+    try {
+      await api("DELETE", "/api/categories/" + id2);
+      var cd2 = await api("GET", "/api/categories");
+      S.categories = cd2.categories || [];
+      renderCategories();
+      toast("Deleted");
+    } catch (x) { alert(x.message); }
   }
 });
 
-/* ---------- Plan view ---------- */
+/* ============ Plan ============ */
 function planView() {
   var m = S.me, u = m.user, plans = m.plans, now = Date.now();
   var h = '<h1 class="page-title">Plan</h1>';
@@ -1258,9 +1302,9 @@ function planView() {
     '</div>';
   });
 
-  h += '<div style="margin-top:40px">' +
+  h += '<div style="margin-top:64px">' +
     '<h3 class="section-title">Upgrade</h3>' +
-    '<p style="font-size:13.5px;color:var(--muted);margin:0 0 16px">' +
+    '<p style="font-size:13.5px;color:var(--muted);margin:0 0 24px">' +
     (CFG.accountNumber ? "Send payment to the account below, then message us." : "Message BioStore to upgrade.") +
     '</p>';
 
@@ -1285,7 +1329,7 @@ function planView() {
 function limitText(n) { return n >= 100000 ? "Unlimited" : String(n); }
 function bankRow(k, v) { return v ? "<div><span>" + esc(k) + "</span><b>" + esc(v) + "</b></div>" : ""; }
 
-/* ---------- Copy / actions ---------- */
+/* ============ Actions ============ */
 document.addEventListener("click", function (e) {
   var b = e.target.closest("[data-act='copylink']");
   if (b) copy(storeUrl());
@@ -1311,10 +1355,6 @@ function copy(text) {
   }
 }
 
-$("logout").addEventListener("click", async function () {
-  try { await api("POST", "/api/logout", {}); } catch (e) {}
-  location.href = "/";
-});
 $("copyLink").addEventListener("click", function () { if (S.me) copy(storeUrl()); });
 
 load().catch(function (x) {
